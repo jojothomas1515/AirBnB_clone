@@ -23,7 +23,7 @@ class BaseModel:
             updated_at: datetime - assign with the current datetime when an
              instance is created and it will be updated every time you change.
         """
-        if kwargs is not None and kwargs != {}:
+        if kwargs is not None and len(kwargs) != 0:
             for k in kwargs:
                 if k == '__class__':
                     continue
