@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 """Test for Basemodel"""
-
+import os
 import unittest
 from models.base_model import BaseModel
+from models import storage
+import pathlib as pl
 
 
 class TestBaseModel(unittest.TestCase):
@@ -10,10 +12,15 @@ class TestBaseModel(unittest.TestCase):
     def setUp(self):
         self.b1 = BaseModel()
         self.b2 = BaseModel()
+        storage._FileStorage__file_path = "test.json"
+
 
     def tearDown(self):
         del self.b1
         del self.b2
+
+        if pl.Path("test.json").is_file():
+            os.remove("test.json")
 
     def test_if_same_id(self):
         self.assertNotEqual(self.b1.id, self.b2.id)
@@ -45,3 +52,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(new_model.created_at, self.b1.created_at)
         self.assertEqual(new_model.updated_at, self.b1.updated_at)
         self.assertEqual(new_model.name, self.b1.name)
+
+    def test_json_file_existence(self):
+        self.b1.save()
+        self.assertTrue(pl.Path("test.json").is_file())
+
