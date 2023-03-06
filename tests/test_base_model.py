@@ -2,8 +2,6 @@
 """Test for Basemodel"""
 
 import unittest
-
-from sqlalchemy import false
 from models.base_model import BaseModel
 
 
@@ -23,3 +21,27 @@ class TestBaseModel(unittest.TestCase):
     def test_not_same_object(self):
         self.assertIsNot(self.b1, self.b2)
 
+    def test_isinstance(self):
+        self.assertIsInstance(self.b1, BaseModel)
+        self.assertIsInstance(self.b2, BaseModel)
+
+    def test_save_method(self):
+        test_time = self.b1.updated_at
+        self.b1.save()
+        self.assertNotEqual(test_time, self.b1.updated_at)
+
+    def test_model_attributes(self):
+        li = ['id', 'created_at', 'updated_at']
+        self.assertListEqual(li, list(self.b1.__dict__.keys()))
+        li = li + ['name']
+        self.b1.name = "victoria"
+        self.assertListEqual(li, list(self.b1.__dict__.keys()))
+
+    def test_model_from_dictionary(self):
+        self.b1.name = "Jojo"
+        b1_json = self.b1.to_dict()
+        new_model = BaseModel(**b1_json)
+        self.assertEqual(new_model.id, self.b1.id)
+        self.assertEqual(new_model.created_at, self.b1.created_at)
+        self.assertEqual(new_model.updated_at, self.b1.updated_at)
+        self.assertEqual(new_model.name, self.b1.name)
