@@ -33,14 +33,15 @@ class FileStorage:
         """Serialize and save the object to a json file
         specified by __file_path
         """
+        temp_dictionary: dict = {}
         for k, v in self.__objects.items():
             try:
-                self.__objects[k] = v.to_dict()
+                temp_dictionary[k] = v.to_dict()
             except AttributeError as e:
                 pass
 
         with open(self.__file_path, 'w', encoding='utf-8') as f:
-            json.dump(self.__objects, f)
+            json.dump(temp_dictionary, f)
 
     def reload(self):
         """Deserializes the JSON file to __objects (only if the JSON file (__file_path) exists
@@ -50,5 +51,5 @@ class FileStorage:
         try:
             with open(self.__file_path, 'r', encoding='utf-8') as f:
                 self.__objects = json.loads(f.read())
-        except (Exception):
+        except Exception:
             pass
