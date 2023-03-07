@@ -91,3 +91,5 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
 
         self.assertRegex(test_str, expected_regex="\"(collab_count)\"[:\s]+(2)")
         self.assertRegex(test_str, expected_regex="\"(name)\"[:\s]{2}\"(Jojo)\"")
+
+    # Todo: write a testcase for all

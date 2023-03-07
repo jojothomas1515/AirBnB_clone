@@ -18,7 +18,15 @@ class FileStorage:
 
     def all(self):
         """Returns the dictionary objects <__objects>."""
-        return self.__objects
+
+        temp_dict: dict = {}
+        # k: stands for key and v: stands for value
+        for k, v in self.__objects.items():
+            try:
+                temp_dict[k] = v.to_dict
+            except Exception as e:
+                temp_dict[k] = v
+        return temp_dict
 
     def new(self, obj):
         """ Set in the object in the __object dictionary with the kay
