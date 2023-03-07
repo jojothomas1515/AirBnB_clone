@@ -51,6 +51,19 @@ class FileStorage:
         with open(self.__file_path, 'w', encoding='utf-8') as f:
             json.dump(temp_dictionary, f)
 
+    def destroy(self, key):
+        del self.__objects[key]
+
+        temp_dictionary: dict = {}
+        for k, v in self.__objects.items():
+            try:
+                temp_dictionary[k] = v.to_dict()
+            except AttributeError as e:
+                temp_dictionary[k] = v
+
+        with open(self.__file_path, 'w', encoding='utf-8') as f:
+            json.dump(temp_dictionary, f)
+
     def reload(self):
         """Deserializes the JSON file to __objects (only if the JSON file (__file_path) exists
         otherwise, do nothing. If the file doesn’t exist, no exception should be raised).

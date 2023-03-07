@@ -46,7 +46,7 @@ class BaseModel:
 
     def to_dict(self):
         """Dicttionary representation of instance attributes."""
-        result:dict = {}
+        result: dict = {}
         result.update(self.__dict__)
         result['__class__'] = self.__class__.__name__
         result['created_at'] = self.created_at.isoformat()

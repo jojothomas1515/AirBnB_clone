@@ -22,7 +22,7 @@ class TermColor:
 class HBNBCommand(cmd.Cmd):
     """Console command line class for model management."""
     prompt = "(hbnb)"
-    model_dict = {"BaseModel": BaseModel}
+    model_dict: dict = {"BaseModel": BaseModel}
 
     # validator = re.compile(r"([A-Z][^\.]+)\.([\w-]+)")
 
@@ -42,8 +42,7 @@ class HBNBCommand(cmd.Cmd):
 
         if line == "":
             print("** class name missing **")
-
-        if line in self.model_dict.keys():
+        elif line in self.model_dict.keys():
             obj = self.model_dict[line]().save()
         else:
             print("** class doesn't exist **")
@@ -58,8 +57,7 @@ class HBNBCommand(cmd.Cmd):
 
         if line == "":
             print("** class name missing **")
-
-        if line.split(".")[0] in self.model_dict.keys():
+        elif line.split(".")[0] in self.model_dict.keys():
             if len(line.split(".")) == 2:
                 result = storage.all()
                 if line in result.keys():
@@ -78,16 +76,57 @@ class HBNBCommand(cmd.Cmd):
          Args:
             line: argument that command is supposed to work
          """
-        # Todo:delete instance and save
-        pass
+        # Todo:delete instance and save further implementations
+        if line == "":
+            print("** class name missing **")
+        elif line.split(".")[0] in self.model_dict.keys():
+            if len(line.split(".")) == 2:
+                try:
+                    del storage._FileStorage__objects[line]
+                    storage.save()
+                except KeyError as e:
+                    print("** no instance found **")
+            else:
+                print("** instance id missing **")
+        else:
+            print("** class doesn't exist **")
 
-    def emptyline(self):
-        """Does Nothing."""
-        pass
+        # storage.destroy(line)
+
+    def do_all(self, line):
+        """Prints all string representation of all
+        instances based or not on the class name.
+        Ex: $ all BaseModel or $ all.
+        """
+        result: dict
+        if line == "":
+            result = storage.all()
+            for k, v in result.items():
+                print(BaseModel(**v))
+        elif line in self.model_dict.keys():
+            result = storage.all()
+            for k,v in result.items():
+                if k.split(".")[0] == line:
+                    print(BaseModel(**v))
+        else:
+            print("** class doesn't exist **")
 
 
-intro = "{}\tHBNBCommand console By JOJO THOMAS and VICTORIA OLABODEH{}\n" \
-        "\n{}\tW\tE\tL\tC\tO\tM\tE\n\n{}".format(TermColor.OKCYAN, TermColor.ENDC,
+def emptyline(self):
+    """Does Nothing."""
+    pass
+
+banner = """
+   (_)         (_)      (_)(_)(_)(_) _       (_) _       (_)      (_)(_)(_)(_) _    
+   (_)         (_)       (_)        (_)      (_)(_)_     (_)       (_)        (_)   
+   (_) _  _  _ (_)       (_) _  _  _(_)      (_)  (_)_   (_)       (_) _  _  _(_)   
+   (_)(_)(_)(_)(_)       (_)(_)(_)(_)_       (_)    (_)_ (_)       (_)(_)(_)(_)_    
+   (_)         (_)       (_)        (_)      (_)      (_)(_)       (_)        (_)   
+   (_)         (_)       (_)_  _  _ (_)      (_)         (_)       (_)_  _  _ (_)   
+   (_)         (_)      (_)(_)(_)(_)         (_)         (_)      (_)(_)(_)(_)      
+"""
+intro = "{}\t{}\n\tconsole By JOJO THOMAS and VICTORIA OLABODEH{}\n" \
+        "\n{}\tW\tE\tL\tC\tO\tM\tE\n\n{}".format(TermColor.OKCYAN,banner,TermColor.ENDC,
                                                  TermColor.HEADER, TermColor.ENDC)
 
 if __name__ == '__main__':
