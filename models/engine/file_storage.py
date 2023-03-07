@@ -23,7 +23,7 @@ class FileStorage:
         # k: stands for key and v: stands for value
         for k, v in self.__objects.items():
             try:
-                temp_dict[k] = v.to_dict
+                temp_dict[k] = v.to_dict()
             except Exception as e:
                 temp_dict[k] = v
         return temp_dict
@@ -46,7 +46,7 @@ class FileStorage:
             try:
                 temp_dictionary[k] = v.to_dict()
             except AttributeError as e:
-                pass
+                temp_dictionary[k] = v
 
         with open(self.__file_path, 'w', encoding='utf-8') as f:
             json.dump(temp_dictionary, f)

@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 """Console module for managing model object creation and storage."""
 import cmd
+from models.base_model import BaseModel
+from models import storage
+import re
 
 
 class TermColor:
@@ -19,6 +22,9 @@ class TermColor:
 class HBNBCommand(cmd.Cmd):
     """Console command line class for model management."""
     prompt = "(hbnb)"
+    model_dict = {"BaseModel": BaseModel}
+
+    # validator = re.compile(r"([A-Z][^\.]+)\.([\w-]+)")
 
     def do_quit(self, line):
         """Exit the command line."""
@@ -28,6 +34,53 @@ class HBNBCommand(cmd.Cmd):
         """Exit the command line."""
         exit(1)
 
+    def do_create(self, line: str):
+        """Create a new instance of BaseModel.
+        Args:
+            line: argument that command is supposed to work
+        """
+
+        if line == "":
+            print("** class name missing **")
+
+        if line in self.model_dict.keys():
+            obj = self.model_dict[line]().save()
+        else:
+            print("** class doesn't exist **")
+
+    def do_show(self, line):
+        """Prints the string representation of
+        an instance based on the class name and id. Ex: $ show BaseModel 1234-1234-1234.
+
+        Args:
+            line: argument that command is supposed to work
+        """
+
+        if line == "":
+            print("** class name missing **")
+
+        if line.split(".")[0] in self.model_dict.keys():
+            if len(line.split(".")) == 2:
+                result = storage.all()
+                if line in result.keys():
+                    print(result[line])
+                else:
+                    print("** no instance found **")
+            else:
+                print("** instance id missing **")
+        else:
+            print("** class doesn't exist **")
+
+    def do_destroy(self, line):
+        """Deletes an instance based on the class name and id
+         (save the change into the JSON file). Ex: $ destroy BaseModel 1234-1234-1234.
+
+         Args:
+            line: argument that command is supposed to work
+         """
+        # Todo:delete instance and save
+        pass
+
     def emptyline(self):
         """Does Nothing."""
         pass
@@ -36,4 +89,6 @@ class HBNBCommand(cmd.Cmd):
 intro = "{}\tHBNBCommand console By JOJO THOMAS and VICTORIA OLABODEH{}\n" \
         "\n{}\tW\tE\tL\tC\tO\tM\tE\n\n{}".format(TermColor.OKCYAN, TermColor.ENDC,
                                                  TermColor.HEADER, TermColor.ENDC)
-HBNBCommand().cmdloop(intro=intro)
+
+if __name__ == '__main__':
+    HBNBCommand().cmdloop(intro=intro)
