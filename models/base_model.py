@@ -4,8 +4,9 @@ Base Model module.
 
 Define all common attributes and methods of other classes
 """
-from uuid import uuid4
 from datetime import datetime
+from uuid import uuid4
+from models import storage
 
 
 class BaseModel:
@@ -35,15 +36,18 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
+            storage.new(self)
 
     def save(self):
         """Update instance attributes and write the timestamp to
         the updated_at attribute."""
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """Dicttionary representation of instance attributes."""
-        result = self.__dict__.copy()
+        result:dict = {}
+        result.update(self.__dict__)
         result['__class__'] = self.__class__.__name__
         result['created_at'] = self.created_at.isoformat()
         result['updated_at'] = self.updated_at.isoformat()
