@@ -65,8 +65,10 @@ class FileStorage:
         exist, no exception should be raised).
         """
         from models.base_model import BaseModel
+        from models.user import User
 
-        __model_classes = {"BaseModel": BaseModel}
+        __model_classes = {"BaseModel": BaseModel,
+                           "User":User,}
         temp_dict: dict = {}
         try:
             with open(self.__file_path, 'r', encoding='utf-8') as f:

@@ -2,6 +2,7 @@
 """Console module for managing model object creation and storage."""
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 import re
 
@@ -22,7 +23,8 @@ class TermColor:
 class HBNBCommand(cmd.Cmd):
     """Console command line class for model management."""
     prompt = "(hbnb)"
-    model_dict: dict = {"BaseModel": BaseModel}
+    model_dict: dict = {"BaseModel": BaseModel,
+                        "User"     : User}
 
     def emptyline(self):
         """Does Nothing."""
