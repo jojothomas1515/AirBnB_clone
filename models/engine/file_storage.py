@@ -19,14 +19,7 @@ class FileStorage:
     def all(self):
         """Returns the dictionary objects <__objects>."""
 
-        temp_dict: dict = {}
-        # k: stands for key and v: stands for value
-        for k, v in self.__objects.items():
-            try:
-                temp_dict[k] = v.to_dict
-            except Exception as e:
-                temp_dict[k] = v
-        return temp_dict
+        return self.__objects
 
     def new(self, obj):
         """ Set in the object in the __object dictionary with the kay
@@ -41,23 +34,46 @@ class FileStorage:
         """Serialize and save the object to a json file
         specified by __file_path
         """
-        temp_dictionary: dict = {}
-        for k, v in self.__objects.items():
-            try:
-                temp_dictionary[k] = v.to_dict()
-            except AttributeError as e:
-                pass
+        temp_dictionary: dict = {k: v.to_dict() for k, v in
+                                 self.__objects.items()}
+        # for k, v in self.__objects.items():
+        #     try:
+        #         temp_dictionary[k] = v.to_dict()
+        #     except AttributeError as e:
+        #         temp_dictionary[k] = v
 
         with open(self.__file_path, 'w', encoding='utf-8') as f:
             json.dump(temp_dictionary, f)
 
-    def reload(self):
-        """Deserializes the JSON file to __objects (only if the JSON file (__file_path) exists
-        otherwise, do nothing. If the file doesn’t exist, no exception should be raised).
-        """
+    def destroy(self, key):
+        del self.__objects[key]
 
+        temp_dictionary: dict = {k: v.to_dict() for k, v in
+                                 self.__objects.items()}
+        # for k, v in self.__objects.items():
+        #     try:
+        #         temp_dictionary[k] = v.to_dict()
+        #     except AttributeError as e:
+        #         temp_dictionary[k] = v
+        with open(self.__file_path, 'w', encoding='utf-8') as f:
+            json.dump(temp_dictionary, f)
+
+    def reload(self):
+        """Deserializes the JSON file to __objects
+        (only if the JSON file (__file_path) exists
+        otherwise, do nothing. If the file doesn’t
+        exist, no exception should be raised).
+        """
+        from models.base_model import BaseModel
+
+        __model_classes = {"BaseModel": BaseModel}
+        temp_dict: dict = {}
         try:
             with open(self.__file_path, 'r', encoding='utf-8') as f:
-                self.__objects = json.loads(f.read())
-        except Exception:
-            pass
+                temp_dict = json.loads(f.read())
+            for key, value in temp_dict.items():
+                s_key = key.split(".")[0]
+                if s_key in __model_classes.keys():
+                    self.__objects[key] = __model_classes[s_key](**value)
+        except KeyError:
+            print("failed")
