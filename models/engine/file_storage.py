@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 """File storage engine module."""
 import json
+from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage:
@@ -64,8 +66,6 @@ class FileStorage:
         otherwise, do nothing. If the file doesn’t
         exist, no exception should be raised).
         """
-        from models.base_model import BaseModel
-        from models.user import User
 
         __model_classes = {"BaseModel": BaseModel,
                            "User"     : User, }

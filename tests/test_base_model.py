@@ -116,6 +116,9 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
             self.assertIsInstance(value, BaseModel)
 
     def test_file_storage_new(self):
+        self.b1.save()
+        self.b2.save()
         self.assertEqual(len(storage.all()), 2)
         b3 = BaseModel()
+        b3.save()
         self.assertEqual(len(storage.all()), 3)
