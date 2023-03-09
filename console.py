@@ -1,9 +1,15 @@
 #!/usr/bin/python3
 """Console module for managing model object creation and storage."""
 import cmd
+import os
 from models.base_model import BaseModel
 from models.user import User
 from models import storage
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 import re
 
 
@@ -24,7 +30,48 @@ class HBNBCommand(cmd.Cmd):
     """Console command line class for model management."""
     prompt = "(hbnb)"
     model_dict: dict = {"BaseModel": BaseModel,
-                        "User"     : User}
+                        "User"     : User,
+                        "Place"    : Place,
+                        "State"    : State,
+                        "City"     : City,
+                        "Amenity"  : Amenity,
+                        "Review"   : Review}
+
+    def all(self, line):
+        # todo : fix implementation
+
+        my_re = r"({})?.?(all\(\))?".format(
+                "|".join(self.model_dict.keys())
+        )
+        regex = re.compile(my_re)
+        model, cond = regex.search(line).groups()
+
+        if cond and model in self.model_dict.keys():
+            result = storage.all()
+            for k, v in result.items():
+                if k.split(".")[0] == model:
+                    print(v)
+        else:
+            return
+
+    def count(self, line):
+        li = []
+        my_re = r"(?P<model>{})?.?(?P<command>count\(\))?".format(
+                "|".join(self.model_dict.keys())
+        )
+        regex = re.compile(my_re)
+        model, cond = regex.search(line).groups()
+        # todo : fix implementation
+        if cond and model in self.model_dict.keys():
+            result = storage.all()
+            for k, v in result.items():
+                if k.split(".")[0] == model:
+                    li.append(v)
+            print(li.__len__())
+
+
+        else:
+            return
 
     def emptyline(self):
         """Does Nothing."""
@@ -37,6 +84,19 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, line):
         """Exit the command line."""
         exit(1)
+
+    def do_clear(self, line):
+        """Clear the terminal window."""
+        os.system("clear")
+
+    def completedefault(self, *ignored) -> list[str]:
+        return [i for i in self.model_dict.keys() if i.startswith(ignored[0])]
+
+    def default(self, line: str) -> None:
+        # todo : fix implementation
+
+        self.all(line)
+        self.count(line)
 
     def do_create(self, line: str):
         """Create a new instance of BaseModel.
@@ -151,7 +211,6 @@ class HBNBCommand(cmd.Cmd):
                 if _key:
                     if _value:
                         if _key not in ["created_at", 'updated_at', "id"]:
-                            print(res.groups())
                             inst = ".".join((_model,
                                              _id))
                             try:
