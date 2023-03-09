@@ -68,7 +68,7 @@ class FileStorage:
         from models.user import User
 
         __model_classes = {"BaseModel": BaseModel,
-                           "User":User,}
+                           "User"     : User, }
         temp_dict: dict = {}
         try:
             with open(self.__file_path, 'r', encoding='utf-8') as f:
@@ -78,4 +78,4 @@ class FileStorage:
                 if s_key in __model_classes.keys():
                     self.__objects[key] = __model_classes[s_key](**value)
         except KeyError:
-            print("failed")
+            pass

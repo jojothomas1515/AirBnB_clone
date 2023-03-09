@@ -92,5 +92,30 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
         self.assertRegex(test_str, expected_regex="\"(collab_count)\"[:\s]+(2)")
         self.assertRegex(test_str, expected_regex="\"(name)\"[:\s]{2}\"(Jojo)\"")
 
-    # Todo: write a testcase for all
-    # Todo: testcase for instance loaded from file
+    def test_filestorage_all(self):
+        self.b1.name = "jojo"
+        self.b1.save()
+        self.b2.name = "victoria"
+        self.b2.save()
+        storage._FileStorage__objects = {}
+        storage.reload()
+        obj_dict = storage.all()
+        for key in obj_dict.keys():
+            self.assertIn(key.split('.')[1],
+                          (self.b1.id, self.b2.id))
+        for value in obj_dict.values():
+            self.assertIn(value.name, ('jojo', 'victoria'))
+
+    def test_obj_instance_loaded_from_file(self):
+        self.b1.save()
+        self.b2.save()
+        storage._FileStorage__objects = {}
+        storage.reload()
+        obj_dict = storage.all()
+        for value in obj_dict.values():
+            self.assertIsInstance(value, BaseModel)
+
+    def test_file_storage_new(self):
+        self.assertEqual(len(storage.all()), 2)
+        b3 = BaseModel()
+        self.assertEqual(len(storage.all()), 3)

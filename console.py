@@ -79,9 +79,10 @@ class HBNBCommand(cmd.Cmd):
 
     def do_destroy(self, line):
         """Deletes an instance based on the class name and id
-         (save the change into the JSON file). Ex: $ destroy BaseModel 1234-1234-1234.
- key = ".".join((line.split(" ")[0],
-                                line.split(" ")[1]))
+         (save the change into the JSON file).
+         Ex: $ destroy BaseModel 1234-1234-1234.
+         key = ".".join((line.split(" ")[0],
+         line.split(" ")[1]))
          Args:
             line: argument that command is supposed to work
          """
@@ -149,7 +150,6 @@ class HBNBCommand(cmd.Cmd):
             if _id:
                 if _key:
                     if _value:
-                        # Todo: implement update
                         if _key not in ["created_at", 'updated_at', "id"]:
                             print(res.groups())
                             inst = ".".join((_model,
