@@ -40,7 +40,7 @@ class HBNBCommand(cmd.Cmd):
     def all(self, line):
         # todo : fix implementation
 
-        my_re = r"({})?.?(all\(\))?".format(
+        my_re = r"({})?\.?(all\(\))?".format(
                 "|".join(self.model_dict.keys())
         )
         regex = re.compile(my_re)
@@ -59,7 +59,7 @@ class HBNBCommand(cmd.Cmd):
 
     def count(self, line):
         li = []
-        my_re = r"(?P<model>{})?.?(?P<command>count\(\))?".format(
+        my_re = r"(?P<model>{})?\.?(?P<command>count\(\))?".format(
                 "|".join(self.model_dict.keys())
         )
         regex = re.compile(my_re)
@@ -79,7 +79,7 @@ class HBNBCommand(cmd.Cmd):
             return True
 
     def show(self, line):
-        my_re = r"(?P<model>{})?.?" \
+        my_re = r"(?P<model>{})?\.?" \
                 r"(?P<command>show\((?P<id>\"[^\"]+\")?\))?".format(
                 "|".join(self.model_dict.keys())
         )
@@ -106,7 +106,7 @@ class HBNBCommand(cmd.Cmd):
             return True
 
     def destroy(self, line):
-        my_re = r"(?P<model>{})?.?" \
+        my_re = r"(?P<model>{})?\.?" \
                 r"(?P<command>destroy\((?P<id>\"[^\"]+\")?\))?".format(
                 "|".join(self.model_dict.keys())
         )
@@ -129,6 +129,35 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
             return True
+
+    def update(self, line):
+        my_re = r"(?P<model>{})?\.?" \
+                r"(?P<command>update\((?P<id>\"[^\"]+\")?,?(?P<key>\"[^\"]+\")?,?(?P<value>\"?[^\"]+\"?)?\))?".format(
+                "|".join(self.model_dict.keys())
+        )
+        regex = re.compile(my_re)
+        model, cond, r_id, r_key, r_value = regex.search(line).groups()
+        # todo : complete implementation and document your code
+        if cond:
+            if not r_id:
+                print("** id is missing **")
+                print("** Usage <Model>.show(\"<id>\") **")
+                return True
+        else:
+            return False
+        if cond and model in self.model_dict.keys():
+            obj_key = ".".join((model, eval(r_id)))
+            all = storage.all()
+            try:
+                obj = all.__dict__[obj_key]
+                obj.__dict__[r_key] = eval(r_value)
+                storage.save()
+            except KeyError:
+                print("** no instance found **")
+        else:
+            print("** class doesn't exist **")
+            return True
+        return (True)
 
     def emptyline(self):
         """Does Nothing."""
@@ -263,8 +292,7 @@ class HBNBCommand(cmd.Cmd):
         """
         reg_text = r"(?P<model>{})?.?" \
                        .format("|".join(self.model_dict.keys())) + \
-                   r"(?P<id>[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}" \
-                   r"-[a-z0-9]{4}-[a-z0-9]{12})?.?" \
+                   r"(?P<id>\"?[^\"]+\"?)?.?" \
                    r"(?P<key>[\w\d_]+)?.?" \
                    r"(?P<value>\"[^\"]+\"|[^ ]+)?"
         validator = re.compile(reg_text)
@@ -274,21 +302,22 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         elif _model in self.model_dict.keys():
             if _id:
-                if _key:
-                    if _value:
-                        if _key not in ["created_at", 'updated_at', "id"]:
-                            inst = ".".join((_model,
-                                             _id))
-                            try:
-                                obj = storage.all()[inst]
+                inst = ".".join((_model,
+                                 _id))
+                try:
+                    obj = storage.all()[inst]
+                    if _key:
+                        if _value:
+                            if _key not in ["created_at", 'updated_at', "id"]:
                                 obj.__dict__[_key] = eval(_value)
                                 storage.save()
-                            except KeyError:
-                                print("** no instance found **")
+
+                        else:
+                            print("** attribute name missing **")
                     else:
                         print("** attribute name missing **")
-                else:
-                    print("** attribute name missing **")
+                except KeyError:
+                    print("** no instance found **")
             else:
                 print("** instance id missing **")
         else:
