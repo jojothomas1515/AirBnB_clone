@@ -45,14 +45,17 @@ class HBNBCommand(cmd.Cmd):
         )
         regex = re.compile(my_re)
         model, cond = regex.search(line).groups()
-
+        if not cond:
+            return False
         if cond and model in self.model_dict.keys():
             result = storage.all()
             for k, v in result.items():
                 if k.split(".")[0] == model:
                     print(v)
+            return True
         else:
-            return
+            print("** class doesn't exist **")
+            return True
 
     def count(self, line):
         li = []
@@ -62,14 +65,18 @@ class HBNBCommand(cmd.Cmd):
         regex = re.compile(my_re)
         model, cond = regex.search(line).groups()
         # todo : fix implementation
+        if not cond:
+            return False
         if cond and model in self.model_dict.keys():
             result = storage.all()
             for k, v in result.items():
                 if k.split(".")[0] == model:
                     li.append(v)
             print(li.__len__())
+            return True
         else:
-            return
+            print("** class doesn't exist **")
+            return True
 
     def show(self, line):
         my_re = r"(?P<model>{})?.?" \
@@ -83,7 +90,9 @@ class HBNBCommand(cmd.Cmd):
             if not r_id:
                 print("** id is missing **")
                 print("** Usage <Model>.show(\"<id>\") **")
-                return
+                return True
+        else:
+            return False
         if cond and model in self.model_dict.keys():
             result = storage.all()
             key = ".".join((model, eval(r_id)))
@@ -91,8 +100,10 @@ class HBNBCommand(cmd.Cmd):
                 print(result[key])
             except KeyError:
                 print("** no instance found **")
+            return True
         else:
-            return
+            print("** class doesn't exist **")
+            return True
 
     def destroy(self, line):
         my_re = r"(?P<model>{})?.?" \
@@ -106,7 +117,9 @@ class HBNBCommand(cmd.Cmd):
             if not r_id:
                 print("** id is missing **")
                 print("** Usage <Model>.show(\"<id>\") **")
-                return
+                return True
+        else:
+            return False
         if cond and model in self.model_dict.keys():
             key = ".".join((model, eval(r_id)))
             if storage.destroy(key):
@@ -114,7 +127,8 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
         else:
-            return
+            print("** class doesn't exist **")
+            return True
 
     def emptyline(self):
         """Does Nothing."""
@@ -138,10 +152,18 @@ class HBNBCommand(cmd.Cmd):
     def default(self, line: str) -> None:
         # todo : fix implementation
 
-        self.all(line)
-        self.count(line)
-        self.show(line)
-        self.destroy(line)
+        if self.all(line):
+            pass
+        elif self.count(line):
+            pass
+        elif self.show(line):
+            pass
+        elif self.destroy(line):
+            pass
+        else:
+            print("**{} is not a valid command **".format(
+                    line
+            ))
 
     def do_create(self, line: str):
         """Create a new instance of BaseModel.
