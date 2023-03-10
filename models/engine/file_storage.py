@@ -83,5 +83,5 @@ class FileStorage:
                 s_key = key.split(".")[0]
                 if s_key in __model_classes.keys():
                     self.__objects[key] = __model_classes[s_key](**value)
-        except KeyError:
+        except (KeyError, FileNotFoundError):
             pass

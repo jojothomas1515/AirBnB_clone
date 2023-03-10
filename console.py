@@ -116,7 +116,7 @@ class HBNBCommand(cmd.Cmd):
         if cond:
             if not r_id:
                 print("** id is missing **")
-                print("** Usage <Model>.show(\"<id>\") **")
+                print("** Usage <Model>.destroy(\"<id>\") **")
                 return True
         else:
             return False
@@ -131,28 +131,42 @@ class HBNBCommand(cmd.Cmd):
             return True
 
     def update(self, line):
-        my_re = r"(?P<model>{})?\.?" \
-                r"(?P<command>update\((?P<id>\"[^\"]+\")?,?(?P<key>\"[^\"]+\")?,?(?P<value>\"?[^\"]+\"?)?\))?".format(
-                "|".join(self.model_dict.keys())
-        )
+        my_re = r"(?P<model>{})?\.?".format(
+                "|".join(self.model_dict.keys())) + \
+                r"(?P<command>update\((?P<id>\"[^\"]+\")?,?\s?" \
+                r"(?P<key>\"[^\"]+\"|\{[^\}]+\})?,?\s?" \
+                r"(?P<value>\"?[^\"]+\"?)?\)" \
+                r")?"
+
         regex = re.compile(my_re)
         model, cond, r_id, r_key, r_value = regex.search(line).groups()
         # todo : complete implementation and document your code
         if cond:
             if not r_id:
                 print("** id is missing **")
-                print("** Usage <Model>.show(\"<id>\") **")
+                print("** Usage <Model>.update(\"<id>\") **")
                 return True
         else:
             return False
+
         if cond and model in self.model_dict.keys():
             obj_key = ".".join((model, eval(r_id)))
-            all = storage.all()
             try:
-                obj = all.__dict__[obj_key]
-                obj.__dict__[r_key] = eval(r_value)
+                obj: object = storage.all()[obj_key]
+                r_key = eval(r_key)
+                if isinstance(r_key, dict):
+                    if "id" in r_key:
+                        del r_key["id"]
+                    if "__class__" in r_key:
+                        del r_key["__class__"]
+                    obj.__dict__.update(r_key)
+                else:
+                    if r_key not in ['id', '__class__']:
+                        obj.__dict__[r_key] = eval(r_value)
+                    else:
+                        print("** cant update id or add __class__ key to dict **")
                 storage.save()
-            except KeyError:
+            except (KeyError, AttributeError):
                 print("** no instance found **")
         else:
             print("** class doesn't exist **")
@@ -189,10 +203,10 @@ class HBNBCommand(cmd.Cmd):
             pass
         elif self.destroy(line):
             pass
+        elif self.update(line):
+            pass
         else:
-            print("**{} is not a valid command **".format(
-                    line
-            ))
+            print("** invalid command **")
 
     def do_create(self, line: str):
         """Create a new instance of BaseModel.
