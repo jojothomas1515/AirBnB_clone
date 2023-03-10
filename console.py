@@ -68,8 +68,51 @@ class HBNBCommand(cmd.Cmd):
                 if k.split(".")[0] == model:
                     li.append(v)
             print(li.__len__())
+        else:
+            return
 
+    def show(self, line):
+        my_re = r"(?P<model>{})?.?" \
+                r"(?P<command>show\((?P<id>\"[^\"]+\")?\))?".format(
+                "|".join(self.model_dict.keys())
+        )
+        regex = re.compile(my_re)
+        model, cond, r_id = regex.search(line).groups()
+        # todo : fix implementation
+        if cond:
+            if not r_id:
+                print("** id is missing **")
+                print("** Usage <Model>.show(\"<id>\") **")
+                return
+        if cond and model in self.model_dict.keys():
+            result = storage.all()
+            key = ".".join((model, eval(r_id)))
+            try:
+                print(result[key])
+            except KeyError:
+                print("** no instance found **")
+        else:
+            return
 
+    def destroy(self, line):
+        my_re = r"(?P<model>{})?.?" \
+                r"(?P<command>destroy\((?P<id>\"[^\"]+\")?\))?".format(
+                "|".join(self.model_dict.keys())
+        )
+        regex = re.compile(my_re)
+        model, cond, r_id = regex.search(line).groups()
+        # todo : fix implementation
+        if cond:
+            if not r_id:
+                print("** id is missing **")
+                print("** Usage <Model>.show(\"<id>\") **")
+                return
+        if cond and model in self.model_dict.keys():
+            key = ".".join((model, eval(r_id)))
+            if storage.destroy(key):
+                pass
+            else:
+                print("** no instance found **")
         else:
             return
 
@@ -97,6 +140,8 @@ class HBNBCommand(cmd.Cmd):
 
         self.all(line)
         self.count(line)
+        self.show(line)
+        self.destroy(line)
 
     def do_create(self, line: str):
         """Create a new instance of BaseModel.
@@ -153,10 +198,9 @@ class HBNBCommand(cmd.Cmd):
             if len(line.split(" ")) == 2:
                 key = ".".join((line.split(" ")[0],
                                 line.split(" ")[1]))
-                try:
-                    del storage._FileStorage__objects[key]
-                    storage.save()
-                except KeyError as e:
+                if storage.destroy(key):
+                    pass
+                else:
                     print("** no instance found **")
             else:
                 print("** instance id missing **")

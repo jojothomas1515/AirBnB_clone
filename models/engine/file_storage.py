@@ -53,17 +53,13 @@ class FileStorage:
             json.dump(temp_dictionary, f)
 
     def destroy(self, key):
-        del self.__objects[key]
+        try:
+            del self.__objects[key]
 
-        temp_dictionary: dict = {k: v.to_dict() for k, v in
-                                 self.__objects.items()}
-        # for k, v in self.__objects.items():
-        #     try:
-        #         temp_dictionary[k] = v.to_dict()
-        #     except AttributeError as e:
-        #         temp_dictionary[k] = v
-        with open(self.__file_path, 'w', encoding='utf-8') as f:
-            json.dump(temp_dictionary, f)
+            self.save()
+            return True
+        except KeyError:
+            return False
 
     def reload(self):
         """Deserializes the JSON file to __objects
