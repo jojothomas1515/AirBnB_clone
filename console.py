@@ -13,19 +13,6 @@ from models.review import Review
 import re
 
 
-class TermColor:
-    """Colors for styling outputs"""
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-
 class HBNBCommand(cmd.Cmd):
     """Console command line class for model management."""
     prompt = "(hbnb) "
@@ -68,7 +55,6 @@ class HBNBCommand(cmd.Cmd):
         )
         regex = re.compile(my_re)
         model, cond = regex.search(line).groups()
-        # todo : fix implementation
         if not cond:
             return False
         if cond and model in self.model_dict.keys():
@@ -92,7 +78,6 @@ class HBNBCommand(cmd.Cmd):
         )
         regex = re.compile(my_re)
         model, cond, r_id = regex.search(line).groups()
-        # todo : fix implementation
         if cond:
             if not r_id:
                 print("** id is missing **")
@@ -122,7 +107,6 @@ class HBNBCommand(cmd.Cmd):
         )
         regex = re.compile(my_re)
         model, cond, r_id = regex.search(line).groups()
-        # todo : fix implementation
         if cond:
             if not r_id:
                 print("** id is missing **")
@@ -153,7 +137,6 @@ class HBNBCommand(cmd.Cmd):
 
         regex = re.compile(my_re)
         model, cond, r_id, r_key, r_value = regex.search(line).groups()
-        # todo : complete implementation and document your code
         if cond:
             if not r_id:
                 print("** id is missing **")
@@ -272,7 +255,6 @@ class HBNBCommand(cmd.Cmd):
          Args:
             line: argument that command is supposed to work
          """
-        # Todo:delete instance and save further implementations
         if line == "":
             print("** class name missing **")
         elif line.split(" ")[0] in self.model_dict.keys():
