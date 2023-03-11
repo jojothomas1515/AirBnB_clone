@@ -16,13 +16,6 @@ import re
 class HBNBCommand(cmd.Cmd):
     """Console command line class for model management."""
     prompt = "(hbnb) "
-    model_dict: dict = {"BaseModel": BaseModel,
-                        "User": User,
-                        "Place": Place,
-                        "State": State,
-                        "City": City,
-                        "Amenity": Amenity,
-                        "Review": Review}
 
     def emptyline(self):
         """Does Nothing."""
