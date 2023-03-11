@@ -36,149 +36,149 @@ class HBNBCommand(cmd.Cmd):
         """Exit the command line."""
         return True
 
-    # def all(self, line):
-    #     """all method up be called by default,
-    #     parses the regex and run if it matches.
-    #     """
-    #     my_re = r"({})?\.?(all\(\))?".format(
-    #             "|".join(self.model_dict.keys())
-    #     )
-    #     regex = re.compile(my_re)
-    #     model, cond = regex.search(line).groups()
-    #     if not cond:
-    #         return False
-    #     if cond and model in self.model_dict.keys():
-    #         result = storage.all()
-    #         for k, v in result.items():
-    #             if k.split(".")[0] == model:
-    #                 print(v)
-    #         return True
-    #     else:
-    #         print("** class doesn't exist **")
-    #         return True
-    #
-    # def count(self, line):
-    #     """count method up be called by default,
-    #     parses the regex and run if it matches.
-    #     """
-    #     li = []
-    #     my_re = r"(?P<model>{})?\.?(?P<command>count\(\))?".format(
-    #             "|".join(self.model_dict.keys())
-    #     )
-    #     regex = re.compile(my_re)
-    #     model, cond = regex.search(line).groups()
-    #     if not cond:
-    #         return False
-    #     if cond and model in self.model_dict.keys():
-    #         result = storage.all()
-    #         for k, v in result.items():
-    #             if k.split(".")[0] == model:
-    #                 li.append(v)
-    #         print(li.__len__())
-    #         return True
-    #     else:
-    #         print("** class doesn't exist **")
-    #         return True
-    #
-    # def show(self, line):
-    #     """show method up be called by default,
-    #     parses the regex and run if it matches.
-    #     """
-    #     my_re = r"(?P<model>{})?\.?" \
-    #             r"(?P<command>show\((?P<id>\"[^\"]+\")?\))?".format(
-    #             "|".join(self.model_dict.keys()))
-    #     regex = re.compile(my_re)
-    #     model, cond, r_id = regex.search(line).groups()
-    #     if cond:
-    #         if not r_id:
-    #             print("** id is missing **")
-    #             print("** Usage <Model>.show(\"<id>\") **")
-    #             return True
-    #     else:
-    #         return False
-    #     if cond and model in self.model_dict.keys():
-    #         result = storage.all()
-    #         key = ".".join((model, eval(r_id)))
-    #         try:
-    #             print(result[key])
-    #         except KeyError:
-    #             print("** no instance found **")
-    #         return True
-    #     else:
-    #         print("** class doesn't exist **")
-    #         return True
-    #
-    # def destroy(self, line):
-    #     """destroy method up be called by default,
-    #             parses the regex and run if it matches.
-    #     """
-    #     my_re = r"(?P<model>{})?\.?" \
-    #             r"(?P<command>destroy\((?P<id>\"[^\"]+\")?\))?".format(
-    #             "|".join(self.model_dict.keys()))
-    #     regex = re.compile(my_re)
-    #     model, cond, r_id = regex.search(line).groups()
-    #     if cond:
-    #         if not r_id:
-    #             print("** id is missing **")
-    #             print("** Usage <Model>.destroy(\"<id>\") **")
-    #             return True
-    #     else:
-    #         return False
-    #     if cond and model in self.model_dict.keys():
-    #         key = ".".join((model, eval(r_id)))
-    #         if storage.destroy(key):
-    #             pass
-    #         else:
-    #             print("** no instance found **")
-    #     else:
-    #         print("** class doesn't exist **")
-    #         return True
-    #
-    # def update(self, line):
-    #     """update method up be called by default,
-    #      parses the regex and run if it matches.
-    #     """
-    #     my_re = r"(?P<model>{})?\.?".format(
-    #             "|".join(self.model_dict.keys())) + \
-    #             r"(?P<command>update\((?P<id>\"[^\"]+\")?,?\s?" \
-    #             r"(?P<key>\"[^\"]+\"|\{[^\}]+\})?,?\s?" \
-    #             r"(?P<value>\"?[^\"]+\"?)?\)" \
-    #             r")?"
-    #
-    #     regex = re.compile(my_re)
-    #     model, cond, r_id, r_key, r_value = regex.search(line).groups()
-    #     if cond:
-    #         if not r_id:
-    #             print("** id is missing **")
-    #             print("** Usage <Model>.update(\"<id>\") **")
-    #             return True
-    #     else:
-    #         return False
-    #
-    #     if cond and model in self.model_dict.keys():
-    #         obj_key = ".".join((model, eval(r_id)))
-    #         try:
-    #             obj: object = storage.all()[obj_key]
-    #             r_key = eval(r_key)
-    #             if isinstance(r_key, dict):
-    #                 if "id" in r_key:
-    #                     del r_key["id"]
-    #                 if "__class__" in r_key:
-    #                     del r_key["__class__"]
-    #                 obj.__dict__.update(r_key)
-    #             else:
-    #                 if r_key not in ['id', '__class__']:
-    #                     obj.__dict__[r_key] = eval(r_value)
-    #                 else:
-    #                     print("** cant update id or add __class__ key to dict **")
-    #             storage.save()
-    #         except (KeyError, AttributeError):
-    #             print("** no instance found **")
-    #     else:
-    #         print("** class doesn't exist **")
-    #         return True
-    #     return (True)
-    #
+    def all(self, line):
+        """all method up be called by default,
+        parses the regex and run if it matches.
+        """
+        my_re = r"({})?\.?(all\(\))?".format(
+                "|".join(self.model_dict.keys())
+        )
+        regex = re.compile(my_re)
+        model, cond = regex.search(line).groups()
+        if not cond:
+            return False
+        if cond and model in self.model_dict.keys():
+            result = storage.all()
+            for k, v in result.items():
+                if k.split(".")[0] == model:
+                    print(v)
+            return True
+        else:
+            print("** class doesn't exist **")
+            return True
+
+    def count(self, line):
+        """count method up be called by default,
+        parses the regex and run if it matches.
+        """
+        li = []
+        my_re = r"(?P<model>{})?\.?(?P<command>count\(\))?".format(
+                "|".join(self.model_dict.keys())
+        )
+        regex = re.compile(my_re)
+        model, cond = regex.search(line).groups()
+        if not cond:
+            return False
+        if cond and model in self.model_dict.keys():
+            result = storage.all()
+            for k, v in result.items():
+                if k.split(".")[0] == model:
+                    li.append(v)
+            print(li.__len__())
+            return True
+        else:
+            print("** class doesn't exist **")
+            return True
+
+    def show(self, line):
+        """show method up be called by default,
+        parses the regex and run if it matches.
+        """
+        my_re = r"(?P<model>{})?\.?" \
+                r"(?P<command>show\((?P<id>\"[^\"]+\")?\))?".format(
+                "|".join(self.model_dict.keys()))
+        regex = re.compile(my_re)
+        model, cond, r_id = regex.search(line).groups()
+        if cond:
+            if not r_id:
+                print("** id is missing **")
+                print("** Usage <Model>.show(\"<id>\") **")
+                return True
+        else:
+            return False
+        if cond and model in self.model_dict.keys():
+            result = storage.all()
+            key = ".".join((model, eval(r_id)))
+            try:
+                print(result[key])
+            except KeyError:
+                print("** no instance found **")
+            return True
+        else:
+            print("** class doesn't exist **")
+            return True
+
+    def destroy(self, line):
+        """destroy method up be called by default,
+                parses the regex and run if it matches.
+        """
+        my_re = r"(?P<model>{})?\.?" \
+                r"(?P<command>destroy\((?P<id>\"[^\"]+\")?\))?".format(
+                "|".join(self.model_dict.keys()))
+        regex = re.compile(my_re)
+        model, cond, r_id = regex.search(line).groups()
+        if cond:
+            if not r_id:
+                print("** id is missing **")
+                print("** Usage <Model>.destroy(\"<id>\") **")
+                return True
+        else:
+            return False
+        if cond and model in self.model_dict.keys():
+            key = ".".join((model, eval(r_id)))
+            if storage.destroy(key):
+                pass
+            else:
+                print("** no instance found **")
+        else:
+            print("** class doesn't exist **")
+            return True
+
+    def update(self, line):
+        """update method up be called by default,
+         parses the regex and run if it matches.
+        """
+        my_re = r"(?P<model>{})?\.?".format(
+                "|".join(self.model_dict.keys())) + \
+                r"(?P<command>update\((?P<id>\"[^\"]+\")?,?\s?" \
+                r"(?P<key>\"[^\"]+\"|\{[^\}]+\})?,?\s?" \
+                r"(?P<value>\"?[^\"]+\"?)?\)" \
+                r")?"
+
+        regex = re.compile(my_re)
+        model, cond, r_id, r_key, r_value = regex.search(line).groups()
+        if cond:
+            if not r_id:
+                print("** id is missing **")
+                print("** Usage <Model>.update(\"<id>\") **")
+                return True
+        else:
+            return False
+
+        if cond and model in self.model_dict.keys():
+            obj_key = ".".join((model, eval(r_id)))
+            try:
+                obj: object = storage.all()[obj_key]
+                r_key = eval(r_key)
+                if isinstance(r_key, dict):
+                    if "id" in r_key:
+                        del r_key["id"]
+                    if "__class__" in r_key:
+                        del r_key["__class__"]
+                    obj.__dict__.update(r_key)
+                else:
+                    if r_key not in ['id', '__class__']:
+                        obj.__dict__[r_key] = eval(r_value)
+                    else:
+                        print("** cant update id or add __class__ key to dict **")
+                storage.save()
+            except (KeyError, AttributeError):
+                print("** no instance found **")
+        else:
+            print("** class doesn't exist **")
+            return True
+        return (True)
+
     def do_clear(self, line):
         """Clear the terminal window."""
         os.system("clear")
