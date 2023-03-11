@@ -3,6 +3,7 @@
 import os
 import unittest
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 import pathlib as pl
 
@@ -83,3 +84,28 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
         b3 = BaseModel()
         b3.save()
         self.assertEqual(len(storage.all()), 3)
+
+
+class TestUserAndFileStorage(unittest.TestCase):
+    """User and FileStorage Tests."""
+
+    def setUp(self):
+        storage._FileStorage__file_path = 'test.json'
+        storage._FileStorage__objects = {}
+        self.u1 = User()
+        self.u2 = User()
+        self.u1.first_name = 'Joseph'
+        self.u2.first_name = 'Victoria'
+        self.u1.last_name = 'Thomas'
+        self.u2.last_name = 'Olabodeh'
+        self.u1.password = 'megamind'
+        self.u2.password = 'root'
+        self.u1.email = 'jojothomas1515@gmail.com'
+        self.u2.email = 'bhummhie97@gmail.com'
+
+    def tearDown(self):
+        del self.u1
+        del self.u2
+
+        if pl.Path("test.json").is_file():
+            os.remove("test.json")
