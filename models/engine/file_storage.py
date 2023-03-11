@@ -1,6 +1,13 @@
 #!/usr/bin/python3
 """File storage engine module."""
 import json
+from models.base_model import BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class FileStorage:
@@ -46,17 +53,17 @@ class FileStorage:
             json.dump(temp_dictionary, f)
 
     def destroy(self, key):
-        del self.__objects[key]
+        """This method deletes instance for the file storage
+        Args:
+            key (str): They of the object instance
+        """
+        try:
+            del self.__objects[key]
 
-        temp_dictionary: dict = {k: v.to_dict() for k, v in
-                                 self.__objects.items()}
-        # for k, v in self.__objects.items():
-        #     try:
-        #         temp_dictionary[k] = v.to_dict()
-        #     except AttributeError as e:
-        #         temp_dictionary[k] = v
-        with open(self.__file_path, 'w', encoding='utf-8') as f:
-            json.dump(temp_dictionary, f)
+            self.save()
+            return True
+        except KeyError:
+            return False
 
     def reload(self):
         """Deserializes the JSON file to __objects
@@ -64,9 +71,14 @@ class FileStorage:
         otherwise, do nothing. If the file doesn’t
         exist, no exception should be raised).
         """
-        from models.base_model import BaseModel
 
-        __model_classes = {"BaseModel": BaseModel}
+        __model_classes = {"BaseModel": BaseModel,
+                           "User": User,
+                           "Place": Place,
+                           "State": State,
+                           "City": City,
+                           "Amenity": Amenity,
+                           "Review": Review}
         temp_dict: dict = {}
         try:
             with open(self.__file_path, 'r', encoding='utf-8') as f:
@@ -75,5 +87,5 @@ class FileStorage:
                 s_key = key.split(".")[0]
                 if s_key in __model_classes.keys():
                     self.__objects[key] = __model_classes[s_key](**value)
-        except KeyError:
-            print("failed")
+        except (KeyError, FileNotFoundError):
+            pass
