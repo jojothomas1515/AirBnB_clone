@@ -265,6 +265,27 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
+    def do_all(self, line):
+        """Prints all string representation of all
+        instances based or not on the class name.
+        Ex: $ all BaseModel or $ all.
+
+        Args:
+            line: command argument
+        """
+        result: dict
+        if line == "":
+            result = storage.all()
+            for key, value in result.items():
+                print(value)
+        elif line in self.model_dict.keys():
+            result = storage.all()
+            for k, v in result.items():
+                if k.split(".")[0] == line:
+                    print(v)
+        else:
+            print("** class doesn't exist **")
+
     def do_all(self, arg):
         """Prints all string representation of all instances
         based or not on the class name
@@ -291,48 +312,6 @@ class HBNBCommand(cmd.Cmd):
             """
             if class name doesn't exist
             """
-            print("** class doesn't exist **")
-
-    def do_update(self, line):
-        """ Updates an instance based on the class name and id by adding
-        or updating attribute (save the change into the JSON file).
-
-        Example:
-            update BaseModel 1234-1234-1234 email "aibnb@mail.com".
-        Args:
-            line: command argument
-        """
-        reg_text = r"(?P<model>{})?.?" \
-                       .format("|".join(self.model_dict.keys())) + \
-                   r"(?P<id>\"?[^\"]+\"?)?.?" \
-                   r"(?P<key>[\w\d_]+)?.?" \
-                   r"(?P<value>\"[^\"]+\"|[^ ]+)?"
-        validator = re.compile(reg_text)
-        res = validator.search(line)
-        _model, _id, _key, _value = res.groups()
-        if line == "":
-            print("** class name missing **")
-        elif _model in self.model_dict.keys():
-            if _id:
-                inst = ".".join((_model,
-                                 _id))
-                try:
-                    obj = storage.all()[inst]
-                    if _key:
-                        if _value:
-                            if _key not in ["created_at", 'updated_at', "id"]:
-                                obj.__dict__[_key] = eval(_value)
-                                storage.save()
-
-                        else:
-                            print("** attribute name missing **")
-                    else:
-                        print("** attribute name missing **")
-                except KeyError:
-                    print("** no instance found **")
-            else:
-                print("** instance id missing **")
-        else:
             print("** class doesn't exist **")
 
 
