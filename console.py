@@ -28,7 +28,7 @@ class TermColor:
 
 class HBNBCommand(cmd.Cmd):
     """Console command line class for model management."""
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
     model_dict: dict = {"BaseModel": BaseModel,
                         "User": User,
                         "Place": Place,

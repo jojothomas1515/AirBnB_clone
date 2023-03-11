@@ -68,5 +68,3 @@ class TestUserAndFileStorage(TestCase):
 
         if pl.Path("test.json").is_file():
             os.remove("test.json")
-
-    # Todo: write tests for user filestorage
