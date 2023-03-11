@@ -8,15 +8,18 @@ from models import storage
 import pathlib as pl
 
 
-class TestBaseModelAndFileStorage(unittest.TestCase):
+class FileStorage(unittest.TestCase):
+    """Testing file storage"""
 
     def setUp(self):
+        """execute before each test"""
         storage._FileStorage__file_path = 'test.json'
         storage._FileStorage__objects = {}
         self.b1 = BaseModel()
         self.b2 = BaseModel()
 
     def tearDown(self):
+        """Execute after each test"""
         del self.b1
         del self.b2
 
@@ -24,10 +27,12 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
             os.remove("test.json")
 
     def test_json_file_existence(self):
+        """If json file exist."""
         self.b1.save()
         self.assertTrue(pl.Path("test.json").is_file())
 
     def test_json_file_contains_info(self):
+        """if json file contains the attribute info."""
         self.b2.name = "Jojo Thomas"
         self.b2.project_partner_name = "Victoria Oluwabunmi Olabode"
         self.b2.save()
@@ -41,6 +46,8 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
                          expected_regex="(Victoria Oluwabunmi Olabode)")
 
     def test_double_save(self):
+        """Test file being save twice , one before editing and after.
+        """
         self.b1.collab_count = 2
         self.b1.save()
         self.b1.name = "Jojo"
@@ -55,6 +62,7 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
                          expected_regex=r"\"(name)\"[:\s]{2}\"(Jojo)\"")
 
     def test_filestorage_all(self):
+        """test file storage all method."""
         self.b1.name = "jojo"
         self.b1.save()
         self.b2.name = "victoria"
@@ -69,6 +77,7 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
             self.assertIn(value.name, ('jojo', 'victoria'))
 
     def test_obj_instance_loaded_from_file(self):
+        """check for instance loaded from json file."""
         self.b1.save()
         self.b2.save()
         storage._FileStorage__objects = {}
@@ -78,6 +87,7 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
             self.assertIsInstance(value, BaseModel)
 
     def test_file_storage_new(self):
+        """Test the new method in filestorage"""
         self.b1.save()
         self.b2.save()
         self.assertEqual(len(storage.all()), 2)
@@ -90,6 +100,7 @@ class TestUserAndFileStorage(unittest.TestCase):
     """User and FileStorage Tests."""
 
     def setUp(self):
+        """test"""
         storage._FileStorage__file_path = 'test.json'
         storage._FileStorage__objects = {}
         self.u1 = User()
@@ -104,6 +115,7 @@ class TestUserAndFileStorage(unittest.TestCase):
         self.u2.email = 'bhummhie97@gmail.com'
 
     def tearDown(self):
+        """test"""
         del self.u1
         del self.u2
 
