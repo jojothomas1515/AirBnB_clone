@@ -354,17 +354,17 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
 
-banner = """
-   (_)         (_)      (_)(_)(_)(_) _       (_) _       (_)      (_)(_)(_)(_) _    
-   (_)         (_)       (_)        (_)      (_)(_)_     (_)       (_)        (_)   
-   (_) _  _  _ (_)       (_) _  _  _(_)      (_)  (_)_   (_)       (_) _  _  _(_)   
-   (_)(_)(_)(_)(_)       (_)(_)(_)(_)_       (_)    (_)_ (_)       (_)(_)(_)(_)_    
-   (_)         (_)       (_)        (_)      (_)      (_)(_)       (_)        (_)   
-   (_)         (_)       (_)_  _  _ (_)      (_)         (_)       (_)_  _  _ (_)   
-   (_)         (_)      (_)(_)(_)(_)         (_)         (_)      (_)(_)(_)(_)      
-"""
-intro = "{}\t{}\n\tconsole By JOJO THOMAS and VICTORIA OLABODEH{}\n" \
-        "\n{}\tW\tE\tL\tC\tO\tM\tE\n\n{}".format(TermColor.OKCYAN, banner, TermColor.ENDC,
-                                                 TermColor.HEADER, TermColor.ENDC)
 if __name__ == '__main__':
+    banner = """
+       (_)         (_)      (_)(_)(_)(_) _       (_) _       (_)      (_)(_)(_)(_) _    
+       (_)         (_)       (_)        (_)      (_)(_)_     (_)       (_)        (_)   
+       (_) _  _  _ (_)       (_) _  _  _(_)      (_)  (_)_   (_)       (_) _  _  _(_)   
+       (_)(_)(_)(_)(_)       (_)(_)(_)(_)_       (_)    (_)_ (_)       (_)(_)(_)(_)_    
+       (_)         (_)       (_)        (_)      (_)      (_)(_)       (_)        (_)   
+       (_)         (_)       (_)_  _  _ (_)      (_)         (_)       (_)_  _  _ (_)   
+       (_)         (_)      (_)(_)(_)(_)         (_)         (_)      (_)(_)(_)(_)      
+    """
+    intro = "{}\t{}\n\tconsole By JOJO THOMAS and VICTORIA OLABODEH{}\n" \
+            "\n{}\tW\tE\tL\tC\tO\tM\tE\n\n{}".format(TermColor.OKCYAN, banner, TermColor.ENDC,
+                                                     TermColor.HEADER, TermColor.ENDC)
     HBNBCommand().cmdloop(intro=intro)
