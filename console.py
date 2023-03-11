@@ -183,10 +183,6 @@ class HBNBCommand(cmd.Cmd):
         """Clear the terminal window."""
         os.system("clear")
 
-    def completedefault(self, *ignored) -> list[str]:
-        """Basic autocomplete functionality."""
-        return [i for i in self.model_dict.keys() if i.startswith(ignored[0])]
-
     # def default(self, line: str) -> None:
     #     """Using regular expression to map command
     #     Args:
