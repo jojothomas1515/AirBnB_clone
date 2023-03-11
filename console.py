@@ -202,20 +202,20 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** invalid command **")
 
-    def do_create(self, line: str):
-        """Create a new instance of BaseModel.
-        Args:
-            line: argument that command is supposed to work
-        """
-
-        if line == "":
-            print("** class name missing **")
-        elif line in self.model_dict.keys():
-            obj = self.model_dict[line]()
-            obj.save()
-            print(obj.id)
-        else:
-            print("** class doesn't exist **")
+    # def do_create(self, line: str):
+    #     """Create a new instance of BaseModel.
+    #     Args:
+    #         line: argument that command is supposed to work
+    #     """
+    #
+    #     if line == "":
+    #         print("** class name missing **")
+    #     elif line in self.model_dict.keys():
+    #         obj = self.model_dict[line]()
+    #         obj.save()
+    #         print(obj.id)
+    #     else:
+    #         print("** class doesn't exist **")
 
     def do_show(self, line):
         """Prints the string representation of
