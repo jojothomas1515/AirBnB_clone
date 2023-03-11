@@ -200,7 +200,7 @@ class HBNBCommand(cmd.Cmd):
         elif self.update(line):
             pass
         else:
-            print("** invalid command **")
+            self.stdout.write('*** Unknown syntax: %s\n' % line)
 
     def do_create(self, line: str):
         """Create a new instance of BaseModel.
@@ -297,35 +297,30 @@ class HBNBCommand(cmd.Cmd):
         """
         reg_text = r"(?P<model>{})?.?" \
                        .format("|".join(self.model_dict.keys())) + \
-                   r"(?P<id>\"?[^\"]+\"?)?.?" \
+                   r"(?P<id>[^\s]+)?.?" \
                    r"(?P<key>[\w\d_]+)?.?" \
-                   r"(?P<value>\"[^\"]+\"|[^ ]+)?"
+                   r"(?P<value>\"?[^\"]+\"?|[^ ]+)?"
         validator = re.compile(reg_text)
         res = validator.search(line)
         _model, _id, _key, _value = res.groups()
+        data = storage.all()
         if line == "":
             print("** class name missing **")
-        elif _model in self.model_dict.keys():
-            if _id:
-                inst = ".".join((_model,
-                                 _id))
-                try:
-                    obj = storage.all()[inst]
-                    if _key:
-                        if _value:
-                            setattr(obj, _key, eval(_value))
-                            storage.save()
-
-                        else:
-                            print("** value missing **")
-                    else:
-                        print("** attribute name missing **")
-                except Exception:
-                    print("** no instance found **")
-            else:
-                print("** instance id missing **")
-        else:
+        elif not _model:
             print("** class doesn't exist **")
+        elif not _id:
+            print("** instance id missing **")
+        elif ".".join((_model, _id)) not in data.keys():
+            print("** no instance found **")
+        elif not _key:
+            print("** attribute name missing **")
+        elif not _value:
+            print("** value missing **")
+        else:
+            d_key = ".".join((_model, _id))
+            inst: BaseModel = data[d_key]
+            setattr(inst, _key, eval(_value))
+            inst.save()
 
 
 if __name__ == '__main__':
