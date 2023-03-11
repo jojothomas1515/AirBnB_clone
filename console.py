@@ -183,24 +183,24 @@ class HBNBCommand(cmd.Cmd):
         """Clear the terminal window."""
         os.system("clear")
 
-    # def default(self, line: str) -> None:
-    #     """Using regular expression to map command
-    #     Args:
-    #         line (str): command from the stdin
-    #     """
-    #     if self.all(line):
-    #         pass
-    #     elif self.count(line):
-    #         pass
-    #     elif self.show(line):
-    #         pass
-    #     elif self.destroy(line):
-    #         pass
-    #     elif self.update(line):
-    #         pass
-    #     else:
-    #         print("** invalid command **")
-    #
+    def default(self, line: str) -> None:
+        """Using regular expression to map command
+        Args:
+            line (str): command from the stdin
+        """
+        if self.all(line):
+            pass
+        elif self.count(line):
+            pass
+        elif self.show(line):
+            pass
+        elif self.destroy(line):
+            pass
+        elif self.update(line):
+            pass
+        else:
+            print("** invalid command **")
+
     def do_create(self, line: str):
         """Create a new instance of BaseModel.
         Args:
