@@ -74,8 +74,7 @@ class HBNBCommand(cmd.Cmd):
         """
         my_re = r"(?P<model>{})?\.?" \
                 r"(?P<command>show\((?P<id>\"[^\"]+\")?\))?".format(
-                "|".join(self.model_dict.keys())
-        )
+                "|".join(self.model_dict.keys()))
         regex = re.compile(my_re)
         model, cond, r_id = regex.search(line).groups()
         if cond:
@@ -103,8 +102,7 @@ class HBNBCommand(cmd.Cmd):
         """
         my_re = r"(?P<model>{})?\.?" \
                 r"(?P<command>destroy\((?P<id>\"[^\"]+\")?\))?".format(
-                "|".join(self.model_dict.keys())
-        )
+                "|".join(self.model_dict.keys()))
         regex = re.compile(my_re)
         model, cond, r_id = regex.search(line).groups()
         if cond:
@@ -175,11 +173,11 @@ class HBNBCommand(cmd.Cmd):
 
     def do_quit(self, line):
         """Exit the command line."""
-        exit(1)
+        return True
 
     def do_EOF(self, line):
         """Exit the command line."""
-        exit(1)
+        return True
 
     def do_clear(self, line):
         """Clear the terminal window."""
