@@ -7,4 +7,3 @@ class State(BaseModel):
     """model that for creating class instance."""
 
     name: str = ""
-

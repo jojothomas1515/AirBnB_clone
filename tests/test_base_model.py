@@ -78,7 +78,8 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
         my_re = r"(BaseModel)\.({})".format(self.b2.id)
         self.assertRegex(test_str, expected_regex=my_re)
         self.assertRegex(test_str, expected_regex="(Jojo Thomas)")
-        self.assertRegex(test_str, expected_regex="(Victoria Oluwabunmi Olabode)")
+        self.assertRegex(test_str,
+                         expected_regex="(Victoria Oluwabunmi Olabode)")
 
     def test_double_save(self):
         self.b1.collab_count = 2
@@ -89,8 +90,10 @@ class TestBaseModelAndFileStorage(unittest.TestCase):
         with open('test.json', 'r', encoding='utf-8') as fp:
             test_str = fp.read()
 
-        self.assertRegex(test_str, expected_regex="\"(collab_count)\"[:\s]+(2)")
-        self.assertRegex(test_str, expected_regex="\"(name)\"[:\s]{2}\"(Jojo)\"")
+        self.assertRegex(test_str,
+                         expected_regex=r"\"(collab_count)\"[:\s]+(2)")
+        self.assertRegex(test_str,
+                         expected_regex=r"\"(name)\"[:\s]{2}\"(Jojo)\"")
 
     def test_filestorage_all(self):
         self.b1.name = "jojo"

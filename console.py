@@ -30,16 +30,17 @@ class HBNBCommand(cmd.Cmd):
     """Console command line class for model management."""
     prompt = "(hbnb)"
     model_dict: dict = {"BaseModel": BaseModel,
-                        "User"     : User,
-                        "Place"    : Place,
-                        "State"    : State,
-                        "City"     : City,
-                        "Amenity"  : Amenity,
-                        "Review"   : Review}
+                        "User": User,
+                        "Place": Place,
+                        "State": State,
+                        "City": City,
+                        "Amenity": Amenity,
+                        "Review": Review}
 
     def all(self, line):
-        # todo : fix implementation
-
+        """all method up be called by default,
+        parses the regex and run if it matches.
+        """
         my_re = r"({})?\.?(all\(\))?".format(
                 "|".join(self.model_dict.keys())
         )
@@ -58,6 +59,9 @@ class HBNBCommand(cmd.Cmd):
             return True
 
     def count(self, line):
+        """count method up be called by default,
+        parses the regex and run if it matches.
+        """
         li = []
         my_re = r"(?P<model>{})?\.?(?P<command>count\(\))?".format(
                 "|".join(self.model_dict.keys())
@@ -79,6 +83,9 @@ class HBNBCommand(cmd.Cmd):
             return True
 
     def show(self, line):
+        """show method up be called by default,
+        parses the regex and run if it matches.
+        """
         my_re = r"(?P<model>{})?\.?" \
                 r"(?P<command>show\((?P<id>\"[^\"]+\")?\))?".format(
                 "|".join(self.model_dict.keys())
@@ -106,6 +113,9 @@ class HBNBCommand(cmd.Cmd):
             return True
 
     def destroy(self, line):
+        """destroy method up be called by default,
+                parses the regex and run if it matches.
+        """
         my_re = r"(?P<model>{})?\.?" \
                 r"(?P<command>destroy\((?P<id>\"[^\"]+\")?\))?".format(
                 "|".join(self.model_dict.keys())
@@ -131,6 +141,9 @@ class HBNBCommand(cmd.Cmd):
             return True
 
     def update(self, line):
+        """update method up be called by default,
+         parses the regex and run if it matches.
+        """
         my_re = r"(?P<model>{})?\.?".format(
                 "|".join(self.model_dict.keys())) + \
                 r"(?P<command>update\((?P<id>\"[^\"]+\")?,?\s?" \
@@ -190,11 +203,14 @@ class HBNBCommand(cmd.Cmd):
         os.system("clear")
 
     def completedefault(self, *ignored) -> list[str]:
+        """Basic autocomplete functionality."""
         return [i for i in self.model_dict.keys() if i.startswith(ignored[0])]
 
     def default(self, line: str) -> None:
-        # todo : fix implementation
-
+        """Using regular expression to map command
+        Args:
+            line (str): command from the stdin
+        """
         if self.all(line):
             pass
         elif self.count(line):

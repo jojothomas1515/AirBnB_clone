@@ -53,6 +53,10 @@ class FileStorage:
             json.dump(temp_dictionary, f)
 
     def destroy(self, key):
+        """This method deletes instance for the file storage
+        Args:
+            key (str): They of the object instance
+        """
         try:
             del self.__objects[key]
 
@@ -69,12 +73,12 @@ class FileStorage:
         """
 
         __model_classes = {"BaseModel": BaseModel,
-                           "User"     : User,
-                           "Place"    : Place,
-                           "State"    : State,
-                           "City"     : City,
-                           "Amenity"  : Amenity,
-                           "Review"   : Review}
+                           "User": User,
+                           "Place": Place,
+                           "State": State,
+                           "City": City,
+                           "Amenity": Amenity,
+                           "Review": Review}
         temp_dict: dict = {}
         try:
             with open(self.__file_path, 'r', encoding='utf-8') as f:
