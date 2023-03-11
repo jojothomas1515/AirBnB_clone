@@ -127,9 +127,10 @@ class HBNBCommand(cmd.Cmd):
         if cond and model in self.model_dict.keys():
             key = ".".join((model, eval(r_id)))
             if storage.destroy(key):
-                pass
+                return True
             else:
                 print("** no instance found **")
+                return True
         else:
             print("** class doesn't exist **")
             return True
