@@ -321,7 +321,7 @@ class HBNBCommand(cmd.Cmd):
                             print("** value missing **")
                     else:
                         print("** attribute name missing **")
-                except KeyError:
+                except AttributeError:
                     print("** no instance found **")
             else:
                 print("** instance id missing **")
