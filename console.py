@@ -217,53 +217,53 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    # def do_show(self, line):
-    #     """Prints the string representation of
-    #     an instance based on the class name and id. Ex: $ show BaseModel 1234-1234-1234.
-    #
-    #     Args:
-    #         line: argument that command is supposed to work
-    #     """
-    #
-    #     if line == "":
-    #         print("** class name missing **")
-    #     elif line.split(" ")[0] in self.model_dict.keys():
-    #         if len(line.split(" ")) == 2:
-    #             result = storage.all()
-    #             key = ".".join((line.split(" ")[0],
-    #                             line.split(" ")[1]))
-    #             if key in result.keys():
-    #                 print(result[key])
-    #             else:
-    #                 print("** no instance found **")
-    #         else:
-    #             print("** instance id missing **")
-    #     else:
-    #         print("** class doesn't exist **")
+    def do_show(self, line):
+        """Prints the string representation of
+        an instance based on the class name and id. Ex: $ show BaseModel 1234-1234-1234.
 
-    def do_destroy(self, line):
-        """Deletes an instance based on the class name and id
-         (save the change into the JSON file).
-         Ex: $ destroy BaseModel 1234-1234-1234.
-         key = ".".join((line.split(" ")[0],
-         line.split(" ")[1]))
-         Args:
+        Args:
             line: argument that command is supposed to work
-         """
+        """
+
         if line == "":
             print("** class name missing **")
         elif line.split(" ")[0] in self.model_dict.keys():
             if len(line.split(" ")) == 2:
+                result = storage.all()
                 key = ".".join((line.split(" ")[0],
                                 line.split(" ")[1]))
-                if storage.destroy(key):
-                    pass
+                if key in result.keys():
+                    print(result[key])
                 else:
                     print("** no instance found **")
             else:
                 print("** instance id missing **")
         else:
             print("** class doesn't exist **")
+
+    # def do_destroy(self, line):
+    #     """Deletes an instance based on the class name and id
+    #      (save the change into the JSON file).
+    #      Ex: $ destroy BaseModel 1234-1234-1234.
+    #      key = ".".join((line.split(" ")[0],
+    #      line.split(" ")[1]))
+    #      Args:
+    #         line: argument that command is supposed to work
+    #      """
+    #     if line == "":
+    #         print("** class name missing **")
+    #     elif line.split(" ")[0] in self.model_dict.keys():
+    #         if len(line.split(" ")) == 2:
+    #             key = ".".join((line.split(" ")[0],
+    #                             line.split(" ")[1]))
+    #             if storage.destroy(key):
+    #                 pass
+    #             else:
+    #                 print("** no instance found **")
+    #         else:
+    #             print("** instance id missing **")
+    #     else:
+    #         print("** class doesn't exist **")
 
     def do_all(self, line):
         """Prints all string representation of all
