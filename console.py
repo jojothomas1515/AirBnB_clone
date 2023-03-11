@@ -286,53 +286,47 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    def do_update(self, arg):
-        """Updates an instance based on the class name and id
-        by adding or updating attribute (save the change into the JSON file)
+    def do_update(self, line):
+        """ Updates an instance based on the class name and id by adding
+        or updating attribute (save the change into the JSON file).
+
+        Example:
+            update BaseModel 1234-1234-1234 email "aibnb@mail.com".
+        Args:
+            line: command argument
         """
-        args = arg.split()
-        # check if class name is missing
-        if len(args) == 0:
+        reg_text = r"(?P<model>{})?.?" \
+                       .format("|".join(self.model_dict.keys())) + \
+                   r"(?P<id>\"?[^\"]+\"?)?.?" \
+                   r"(?P<key>[\w\d_]+)?.?" \
+                   r"(?P<value>\"[^\"]+\"|[^ ]+)?"
+        validator = re.compile(reg_text)
+        res = validator.search(line)
+        _model, _id, _key, _value = res.groups()
+        if line == "":
             print("** class name missing **")
-        elif args[0] not in [BaseModel.__name__, User.__name__]:
-            # check if the class name doesn't exist
-            print("** class doesn't exist **")
-        elif len(args) < 2:
-            # check if instance id is missing
-            print("** instance id missing **")
-        else:
-            class_name = args[0]
-            instance_id = args[1]
-            key = "{}.{}".format(class_name, instance_id)
-            instance = storage.all()
-
-            if key not in instance:
-                # check if instance is not found
-                print("** no instance found **")
-            elif len(args) < 3:
-                # check if attribute name is missing
-                print("** attribute name missing **")
-            elif len(args) < 4:
-                # check if value for the attribute name doesn't exist
-                print("** value missing **")
-            else:
-                # get the attribute name and value
-                attribute_name = args[2]
-                attribute_value = args[3]
-
-                # cast the value to the correct type
+        elif _model in self.model_dict.keys():
+            if _id:
+                inst = ".".join((_model,
+                                 _id))
                 try:
-                    attribute_value = eval(attribute_value)
-                except (NameError, SyntaxError, TypeError, ValueError):
-                    # eval can raise a lot of error
-                    #   but there are the common ones
-                    pass
+                    obj = storage.all()[inst]
+                    if _key:
+                        if _value:
+                            if _key not in ["created_at", 'updated_at', "id"]:
+                                obj.__dict__[_key] = eval(_value)
+                                storage.save()
 
-                # update the attribute value of the instance
-                instance[key].__dict__[attribute_name] = attribute_value
-
-                # save changes to json file
-                instance[key].save()
+                        else:
+                            print("** value missing **")
+                    else:
+                        print("** attribute name missing **")
+                except KeyError:
+                    print("** no instance found **")
+            else:
+                print("** instance id missing **")
+        else:
+            print("** class doesn't exist **")
 
 
 if __name__ == '__main__':
