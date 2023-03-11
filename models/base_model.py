@@ -36,12 +36,12 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
-            md.storage.new(self)
 
     def save(self):
         """Update instance attributes and write the timestamp to
         the updated_at attribute."""
         self.updated_at = datetime.now()
+        md.storage.new(self)
         md.storage.save()
 
     def to_dict(self):
