@@ -43,11 +43,6 @@ class FileStorage:
         """
         temp_dictionary: dict = {k: v.to_dict() for k, v in
                                  self.__objects.items()}
-        # for k, v in self.__objects.items():
-        #     try:
-        #         temp_dictionary[k] = v.to_dict()
-        #     except AttributeError as e:
-        #         temp_dictionary[k] = v
 
         with open(self.__file_path, 'w', encoding='utf-8') as f:
             json.dump(temp_dictionary, f)
