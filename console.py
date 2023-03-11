@@ -313,8 +313,7 @@ class HBNBCommand(cmd.Cmd):
                     obj = storage.all()[inst]
                     if _key:
                         if _value:
-
-                            obj.__dict__[_key] = eval(_value)
+                            setattr(obj, _key, eval(_value))
                             storage.save()
 
                         else:
