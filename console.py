@@ -179,9 +179,10 @@ class HBNBCommand(cmd.Cmd):
     #         return True
     #     return (True)
     #
-    # def do_clear(self, line):
-    #     """Clear the terminal window."""
-    #     os.system("clear")
+    def do_clear(self, line):
+        """Clear the terminal window."""
+        os.system("clear")
+
     #
     # def completedefault(self, *ignored) -> list[str]:
     #     """Basic autocomplete functionality."""
