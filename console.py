@@ -313,9 +313,9 @@ class HBNBCommand(cmd.Cmd):
                     obj = storage.all()[inst]
                     if _key:
                         if _value:
-                            if _key not in ["created_at", 'updated_at', "id"]:
-                                obj.__dict__[_key] = eval(_value)
-                                storage.save()
+
+                            obj.__dict__[_key] = eval(_value)
+                            storage.save()
 
                         else:
                             print("** value missing **")
