@@ -57,3 +57,9 @@ class FileStorage(unittest.TestCase):
         storage.reload()
         info = ".".join(['BaseModel', self.obj.id])
         self.assertIn(info, storage.all())
+
+    def test_destroy_method(self):
+        self.obj.save()
+        info = ".".join(['BaseModel', self.obj.id])
+        storage.destroy()
+        self.assertEqual({}, storage.all())
