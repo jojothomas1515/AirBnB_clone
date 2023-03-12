@@ -11,27 +11,21 @@ import pathlib as pl
 class FileStorage(unittest.TestCase):
     """Testing file storage"""
 
-    @classmethod
-    def setUpClass(cls):
+    def setUp(self) -> None:
+        """Run before each class test method"""
         """Before class tests runt"""
         storage.__file_path = "test.json"
         storage.__objects = {}
-
-    @classmethod
-    def tearDownClass(cls):
-        """After class tests run"""
-        if pl.Path('test.json').exists():
-            os.remove('test.json')
-
-    def setUp(self) -> None:
-        """Run before each class test method"""
         self.obj = BaseModel()
 
     def tearDown(self) -> None:
         """Run after each class test methon"""
         del self.obj
+        if pl.Path('test.json').exists():
+            os.remove('test.json')
 
     def test_file_exist(self):
+        """."""
         self.obj.save()
 
         self.assertTrue(pl.Path("test.json").exists())
@@ -42,8 +36,16 @@ class FileStorage(unittest.TestCase):
         self.assertIsInstance(storage._FileStorage__file_path, str)
 
     def test_storage_new_method(self):
+        """."""
         obj_1 = BaseModel()
         storage.new(obj_1)
         info = ".".join(['BaseModel', obj_1.id])
         self.assertIn(info, storage._FileStorage__objects)
         self.assertIn(info, storage.all())
+
+    def test_reload_method(self):
+        self.obj.save()
+        storage.__objects = {}
+        self.assertEqual(len(storage.all()), 0)
+        storage.reload()
+        self.assertEqual(len(storage.all()), 1)
