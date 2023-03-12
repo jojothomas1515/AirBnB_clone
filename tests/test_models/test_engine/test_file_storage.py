@@ -121,3 +121,15 @@ class FileStorage(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             all_objs = storage.all("12")
+
+    def test_storage_save_args(self):
+        """ test the save method with args """
+
+        with self.assertRaises(TypeError):
+            storage.save("hey")
+
+    def test_storage_reload_args(self):
+        """ test the reload method with args """
+
+        with self.assertRaises(TypeError):
+            storage.save(102895)
