@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 """Test for Basemodel"""
-import os
 import re
 import unittest
-from models.base_model import BaseModel
-from models import storage
 from datetime import datetime
-import pathlib as pl
+
+from models.base_model import BaseModel
 
 
 class TestBaseModel(unittest.TestCase):

@@ -7,13 +7,13 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from models.engine.file_storage import FileStorage
 from models import storage
 
 
 class FileStorageTest(unittest.TestCase):
     """ Test the FileStorage class """
     s_test = storage
+    s_test._FileStorage__file_path = "file.json"
 
     @classmethod
     def setUpClass(cls):

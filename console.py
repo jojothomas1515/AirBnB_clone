@@ -2,15 +2,16 @@
 """Console module for managing model object creation and storage."""
 import cmd
 import os
-from models.base_model import BaseModel
-from models.user import User
-from models import storage
-from models.place import Place
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.review import Review
 import re
+
+from models import storage
+from models.amenity import Amenity
+from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
@@ -139,8 +140,7 @@ class HBNBCommand(cmd.Cmd):
         """update method up be called by default,
          parses the regex and run if it matches.
         """
-        my_re = r"(?P<model>{})?\.?".format(
-                "|".join(self.model_dict.keys())) + \
+        my_re = r"(?P<model>[A-Za-z]+)?\.?" \
                 r"(?P<command>update\((?P<id>\"[^\"]+\")?,?\s?" \
                 r"(?P<key>\"[^\"]+\"|\{[^\}]+\})?,?\s?" \
                 r"(?P<value>\"?[^\"]+\"?)?\)" \
@@ -149,14 +149,15 @@ class HBNBCommand(cmd.Cmd):
         regex = re.compile(my_re)
         model, cond, r_id, r_key, r_value = regex.search(line).groups()
         if cond:
+            pass
+        else:
+            return False
+
+        if model in self.model_dict.keys():
             if not r_id:
                 print("** id is missing **")
                 print("** Usage <Model>.update(\"<id>\") **")
                 return True
-        else:
-            return False
-
-        if cond and model in self.model_dict.keys():
             obj_key = ".".join((model, eval(r_id)))
             try:
                 obj: object = storage.all()[obj_key]
