@@ -96,3 +96,28 @@ class FileStorage(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             storage.new()
+
+    def test_storage_all(self):
+        """ Test the all method """
+        u1 = User()
+        s1 = State()
+        c1 = City()
+        a1 = Amenity()
+        p1 = Place()
+        r1 = Review()
+        storage.save()
+        all_objs = storage.all()
+
+        self.assertTrue(type(all_objs) is dict)
+
+        for key, val in all_objs.items():
+            self.assertTrue(key in storage._FileStorage__objects)
+            self.assertEqual(val, storage._FileStorage__objects[key])
+
+        self.assertTrue(all_objs is storage._FileStorage__objects)
+
+    def test_storage_all_args(self):
+        """ test the all method with args """
+
+        with self.assertRaises(TypeError):
+            all_objs = storage.all("12")
