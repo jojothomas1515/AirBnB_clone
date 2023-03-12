@@ -14,8 +14,10 @@ from models.user import User
 
 
 class TestConsole(unittest.TestCase):
+    """."""
 
     def setUp(self) -> None:
+        """."""
         storage._FileStorage__file_path = "test2.json"
         storage._FileStorage__objects = {}
 
@@ -25,6 +27,7 @@ class TestConsole(unittest.TestCase):
         self.m2.save()
 
     def tearDown(self) -> None:
+        """."""
         del self.m1
         del self.m2
 
@@ -32,12 +35,14 @@ class TestConsole(unittest.TestCase):
             os.remove("test2.json")
 
     def test_all(self):
+        """."""
         with patch("sys.stdout", new=StringIO()) as f:
             HBNBCommand().onecmd("all")
         self.assertRegex(f.getvalue(), self.m1.id)
         self.assertRegex(f.getvalue(), self.m2.id)
 
     def test_show(self):
+        """."""
         with patch("sys.stdout", new=StringIO()) as f:
             HBNBCommand().onecmd(
                     "show BaseModel {}".format(self.m1.id)

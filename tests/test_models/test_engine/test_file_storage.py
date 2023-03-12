@@ -84,3 +84,15 @@ class FileStorage(unittest.TestCase):
         info = ".".join(['BaseModel', self.obj.id])
         storage.destroy(info)
         self.assertEqual({}, storage.all())
+
+    def test_storage_new_more_args(self):
+        """ Test the new method with more args """
+
+        with self.assertRaises(TypeError):
+            storage.new("b1", "u1")
+
+    def test_storage_new_less_args(self):
+        """ Test the new method with less args """
+
+        with self.assertRaises(TypeError):
+            storage.new()
