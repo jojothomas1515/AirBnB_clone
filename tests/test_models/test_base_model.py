@@ -4,6 +4,7 @@ import os
 import unittest
 from models.base_model import BaseModel
 from models import storage
+from datetime import datetime
 import pathlib as pl
 
 
@@ -47,3 +48,8 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(new_model.created_at, self.b1.created_at)
         self.assertEqual(new_model.updated_at, self.b1.updated_at)
         self.assertEqual(new_model.name, self.b1.name)
+
+    def test_instance_attribute_type(self):
+        self.assertIsInstance(self.b1.id, str)
+        self.assertIsInstance(self.b1.created_at, datetime)
+        self.assertIsInstance(self.b1.updated_at, datetime)
