@@ -2,7 +2,13 @@
 """Test for Basemodel"""
 import os
 import unittest
+
+from models.amenity import Amenity
 from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 from models.user import User
 from models import storage
 import pathlib as pl
@@ -38,11 +44,23 @@ class FileStorage(unittest.TestCase):
 
     def test_storage_new_method(self):
         """."""
-        obj_1 = BaseModel()
-        storage.new(obj_1)
-        info = ".".join(['BaseModel', obj_1.id])
-        self.assertIn(info, storage._FileStorage__objects)
-        self.assertIn(info, storage.all())
+        u1 = User()
+        s1 = State()
+        c1 = City()
+        a1 = Amenity()
+        p1 = Place()
+        r1 = Review()
+
+        objs = [self.obj, u1, s1, c1, a1, p1, r1]
+
+        self.assertEqual(len(storage.all()), 7)
+
+        i = 0
+        for key, val in storage.all().items():
+            obj_key = "{}.{}".format(objs[i].__class__.__name__, objs[i].id)
+            self.assertEqual(obj_key, key)
+            self.assertTrue(val is objs[i])
+            i += 1
 
     def test_reload_method(self):
         """."""
@@ -54,7 +72,6 @@ class FileStorage(unittest.TestCase):
 
     def test_save_method(self):
         """."""
-        storage.new(self.obj)
         storage.save()
         storage.__objects = {}
         storage.reload()
