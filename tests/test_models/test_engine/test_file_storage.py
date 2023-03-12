@@ -8,14 +8,12 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from models.engine.file_storage import FileStorage
+from models import storage
 
 
 class FileStorageTest(unittest.TestCase):
     """ Test the FileStorage class """
-
-    s_test = FileStorage()
-    s_objs = s_test._FileStorage__objects
-    s_file = s_test._FileStorage__file_path
+    s_test = storage
 
     @classmethod
     def setUpClass(cls):
@@ -33,14 +31,14 @@ class FileStorageTest(unittest.TestCase):
     def test_storage1(self):
         """ test file storage """
 
-        self.assertTrue(type(self.s_file) is str)
-        self.assertTrue(type(self.s_objs) is dict)
+        self.assertTrue(type(self.s_test._FileStorage__file_path) is str)
+        self.assertTrue(type(self.s_test._FileStorage__objects) is dict)
 
     def test_storage2(self):
         """ test file storage """
 
-        self.assertEqual(self.s_file, "file.json")
-        self.assertEqual(self.s_objs, {})
+        self.assertEqual(self.s_test._FileStorage__file_path, "file.json")
+        self.assertEqual(self.s_test._FileStorage__objects, {})
 
     def test_storage_new(self):
         """ Test the new method """
@@ -54,11 +52,10 @@ class FileStorageTest(unittest.TestCase):
         r1 = Review()
 
         objs = [b1, u1, s1, c1, a1, p1, r1]
-
-        self.assertEqual(len(self.s_objs), 7)
+        self.assertEqual(len(self.s_test._FileStorage__objects), 7)
 
         i = 0
-        for key, val in self.s_objs.items():
+        for key, val in self.s_test._FileStorage__objects.items():
             obj_key = "{}.{}".format(objs[i].__class__.__name__, objs[i].id)
             self.assertEqual(obj_key, key)
             self.assertTrue(val is objs[i])
@@ -84,10 +81,10 @@ class FileStorageTest(unittest.TestCase):
         self.assertTrue(type(all_objs) is dict)
 
         for key, val in all_objs.items():
-            self.assertTrue(key in self.s_objs)
-            self.assertEqual(val, self.s_objs[key])
+            self.assertTrue(key in self.s_test._FileStorage__objects)
+            self.assertEqual(val, self.s_test._FileStorage__objects[key])
 
-        self.assertTrue(all_objs is self.s_objs)
+        self.assertTrue(all_objs is self.s_test._FileStorage__objects)
 
     def test_storage_all_args(self):
         """ test the all method with args """
@@ -98,28 +95,28 @@ class FileStorageTest(unittest.TestCase):
     def test_storage_save_and_reload(self):
         """ test the save method and reload """
 
-        self.assertFalse(os.path.exists(self.s_file))
+        self.assertFalse(os.path.exists(self.s_test._FileStorage__file_path))
 
         self.s_test.save()
 
-        self.assertTrue(os.path.exists(self.s_file))
-        self.assertTrue(os.path.isfile(self.s_file))
+        self.assertTrue(os.path.exists(self.s_test._FileStorage__file_path))
+        self.assertTrue(os.path.isfile(self.s_test._FileStorage__file_path))
 
-        obj_dict = self.s_objs.copy()
+        obj_dict = self.s_test._FileStorage__objects.copy()
         for key, val in obj_dict.items():
-            del self.s_objs[key]
+            del self.s_test._FileStorage__objects[key]
 
-        self.assertEqual(len(self.s_objs), 0)
+        self.assertEqual(len(self.s_test._FileStorage__objects), 0)
         self.assertEqual(len(self.s_test._FileStorage__objects), 0)
 
         self.s_test.reload()
         FileStorageTest.s_objs = self.s_test._FileStorage__objects
 
-        self.assertEqual(len(self.s_objs), 7)
+        self.assertEqual(len(self.s_test._FileStorage__objects), 7)
         self.assertEqual(len(self.s_test._FileStorage__objects), 7)
         models = [BaseModel, User, State, City, Amenity, Place, Review]
         i = 0
-        for key, val in self.s_objs.items():
+        for key, val in self.s_test._FileStorage__objects.items():
             self.assertTrue(type(val) is models[i])
             i += 1
 

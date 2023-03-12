@@ -18,7 +18,7 @@ class TestConsole(unittest.TestCase):
 
     def setUp(self) -> None:
         """."""
-        storage._FileStorage__file_path = "test2.json"
+        storage._FileStorage__file_path = "file.json"
         storage._FileStorage__objects = {}
 
         self.m1: BaseModel = BaseModel()
@@ -31,8 +31,8 @@ class TestConsole(unittest.TestCase):
         del self.m1
         del self.m2
 
-        if pl.Path("test2.json").is_file():
-            os.remove("test2.json")
+        if pl.Path("file.json").is_file():
+            os.remove("file.json")
 
     def test_all(self):
         """."""
