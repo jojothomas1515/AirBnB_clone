@@ -32,6 +32,7 @@ class FileStorage(unittest.TestCase):
         self.assertTrue(pl.Path("test.json").is_file())
 
     def test_file_storage_attribute_type(self):
+        """."""
         self.assertIsInstance(storage._FileStorage__objects, dict)
         self.assertIsInstance(storage._FileStorage__file_path, str)
 
@@ -44,6 +45,7 @@ class FileStorage(unittest.TestCase):
         self.assertIn(info, storage.all())
 
     def test_reload_method(self):
+        """."""
         self.obj.save()
         storage.__objects = {}
         self.assertEqual(len(storage.all()), 0)
@@ -51,6 +53,7 @@ class FileStorage(unittest.TestCase):
         self.assertEqual(len(storage.all()), 1)
 
     def test_save_method(self):
+        """."""
         storage.new(self.obj)
         storage.save()
         storage.__objects = {}
@@ -59,7 +62,8 @@ class FileStorage(unittest.TestCase):
         self.assertIn(info, storage.all())
 
     def test_destroy_method(self):
+        """."""
         self.obj.save()
         info = ".".join(['BaseModel', self.obj.id])
-        storage.destroy()
+        storage.destroy(info)
         self.assertEqual({}, storage.all())
