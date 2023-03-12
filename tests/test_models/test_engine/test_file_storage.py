@@ -49,3 +49,10 @@ class FileStorage(unittest.TestCase):
         self.assertEqual(len(storage.all()), 0)
         storage.reload()
         self.assertEqual(len(storage.all()), 1)
+
+    def test_save_method(self):
+        storage.save(self.obj)
+        storage.__objects = {}
+        storage.reload()
+        info = ".".join(['BaseModel', self.id])
+        self.assertIn(info, storage.all())
