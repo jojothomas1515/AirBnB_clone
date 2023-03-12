@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Test for Basemodel"""
 import os
+import re
 import unittest
 from models.base_model import BaseModel
 from models import storage
@@ -50,6 +51,14 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(new_model.name, self.b1.name)
 
     def test_instance_attribute_type(self):
+        """."""
         self.assertIsInstance(self.b1.id, str)
         self.assertIsInstance(self.b1.created_at, datetime)
         self.assertIsInstance(self.b1.updated_at, datetime)
+
+    def test_str_representation(self):
+        """."""
+        regex = r"\[BaseModel\] \([^\)]+\) \{[^\}]+\}"
+
+        self.assertRegex(self.b1.__str__(),
+                         expected_regex=re.compile(regex))
