@@ -3,6 +3,7 @@
 import re
 import unittest
 from datetime import datetime
+from time import sleep
 
 from models.base_model import BaseModel
 
@@ -53,6 +54,13 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(self.b1.id, str)
         self.assertIsInstance(self.b1.created_at, datetime)
         self.assertIsInstance(self.b1.updated_at, datetime)
+
+    def test_one_save(self):
+        bm = BaseModel()
+        sleep(0.05)
+        first_updated_at = bm.updated_at
+        bm.save()
+        self.assertLess(first_updated_at, bm.updated_at)
 
     def test_str_representation(self):
         """."""

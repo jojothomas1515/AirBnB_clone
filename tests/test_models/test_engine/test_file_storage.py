@@ -162,16 +162,6 @@ class FileStorageTest(unittest.TestCase):
             "BaseModel", bm.id
         ]), storage.all())
 
-    def test_one_save(self):
-        bm = BaseModel()
-        sleep(0.05)
-        first_updated_at = bm.updated_at
-        bm.save()
-        self.assertLess(first_updated_at, bm.updated_at)
-        del storage._FileStorage__objects[".".join([
-            "BaseModel", bm.id
-        ])]
-
     @classmethod
     def tearDownClass(cls):
         """ calls after the tests """
