@@ -5,6 +5,7 @@ from models import storage
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.city import City
+from models.engine.file_storage import FileStorage
 from models.place import Place
 from models.review import Review
 from models.state import State
@@ -13,16 +14,15 @@ from models.user import User
 
 class FileStorageTest(unittest.TestCase):
     """ Test the FileStorage class """
-    storage._FileStorage__file_path = "test.json"
 
     @classmethod
     def setUpClass(cls):
         """ class before the tests """
 
+        storage._FileStorage__file_path = "test.json"
         objs = storage._FileStorage__objects.copy()
         for key in objs.keys():
             del storage._FileStorage__objects[key]
-
         try:
             os.remove("test.json")
         except FileNotFoundError:
@@ -37,6 +37,7 @@ class FileStorageTest(unittest.TestCase):
     def test_storage2(self):
         """ test file storage """
 
+        self.assertEqual(FileStorage._FileStorage__file_path, "file.json")
         self.assertEqual(storage._FileStorage__file_path, "test.json")
         self.assertEqual(storage._FileStorage__objects, {})
 
