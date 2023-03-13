@@ -133,15 +133,20 @@ class FileStorageTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.s_test.save(102895)
 
-    @classmethod
-    def tearDownClass(cls):
-        """ executes after all tests """
-
-        cls.s_test._FileStorage__objects = {}
-        try:
-            os.remove("test.json")
-        except FileNotFoundError:
-            pass
+    def test_instance_add_with_kwargs(self):
+        bm = BaseModel()
+        from_json = bm.to_dict()
+        print(self.s_test._FileStorage__objects)
+        self.assertIn(".".join([
+            "BaseModel", bm.id
+        ]), storage.all())
+        del storage._FileStorage__objects[".".join([
+            "BaseModel", bm.id
+        ])]
+        res = BaseModel(**from_json)
+        self.assertNotIn(".".join([
+            "BaseModel", bm.id
+        ]), storage.all())
 
     @classmethod
     def tearDownClass(cls):
@@ -151,6 +156,7 @@ class FileStorageTest(unittest.TestCase):
         for key in objs.keys():
             del cls.s_test._FileStorage__objects[key]
 
+        cls.s_test._FileStorage__objects = {}
         try:
             os.remove("test.json")
         except FileNotFoundError:
