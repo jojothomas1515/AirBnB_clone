@@ -1,4 +1,5 @@
 import os
+import pathlib as pl
 import unittest
 from time import sleep
 
@@ -33,13 +34,6 @@ class FileStorageTest(unittest.TestCase):
     #     obj = BaseModel()
     #     with open("test.json", 'r', encoding='utf-8') as f:
     #         data = f.read()
-
-    def test_one_save(self):
-        bm = BaseModel()
-        sleep(0.05)
-        first_updated_at = bm.updated_at
-        bm.save()
-        self.assertLess(first_updated_at, bm.updated_at)
 
     def test_storage1(self):
         """ test file storage """
@@ -109,6 +103,8 @@ class FileStorageTest(unittest.TestCase):
     def test_storage_save_and_reload(self):
         """ test the save method and reload """
 
+        if pl.Path(storage._FileStorage__file_path).exists():
+            os.remove(storage._FileStorage__file_path)
         self.assertFalse(os.path.exists(storage._FileStorage__file_path))
 
         storage.save()
@@ -159,6 +155,16 @@ class FileStorageTest(unittest.TestCase):
         self.assertNotIn(".".join([
             "BaseModel", bm.id
         ]), storage.all())
+
+    def test_one_save(self):
+        bm = BaseModel()
+        sleep(0.05)
+        first_updated_at = bm.updated_at
+        bm.save()
+        self.assertLess(first_updated_at, bm.updated_at)
+        del storage._FileStorage__objects[".".join([
+            "BaseModel", bm.id
+        ])]
 
     @classmethod
     def tearDownClass(cls):
