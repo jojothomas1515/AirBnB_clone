@@ -30,10 +30,13 @@ class FileStorageTest(unittest.TestCase):
         except FileNotFoundError:
             pass
 
-    # def test_base_model_save(self):
-    #     obj = BaseModel()
-    #     with open("test.json", 'r', encoding='utf-8') as f:
-    #         data = f.read()
+    def test_base_model_save(self):
+        obj = BaseModel()
+        obj.save()
+        with open("test.json", 'r', encoding='utf-8') as f:
+            data = f.read()
+        regex = "BaseModel.{}".format(obj.id)
+        self.assertRegex(data, expected_regex=regex)
 
     def test_storage1(self):
         """ test file storage """
