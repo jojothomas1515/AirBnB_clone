@@ -32,8 +32,8 @@ class FileStorageTest(unittest.TestCase):
     def test_storage1(self):
         """ test file storage """
 
-        self.assertTrue(type(self.s_test._FileStorage__file_path) is str)
-        self.assertTrue(type(self.s_test._FileStorage__objects) is dict)
+        self.assertIsInstance(storage._FileStorage__file_path, str)
+        self.assertIsInstance(storage._FileStorage__objects, dict)
 
     def test_storage2(self):
         """ test file storage """
