@@ -37,6 +37,9 @@ class FileStorageTest(unittest.TestCase):
             data = f.read()
         regex = "BaseModel.{}".format(obj.id)
         self.assertRegex(data, expected_regex=regex)
+        del storage._FileStorage__objects[".".join([
+            "BaseModel", obj.id
+        ])]
 
     def test_storage1(self):
         """ test file storage """
