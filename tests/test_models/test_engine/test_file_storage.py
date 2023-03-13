@@ -77,38 +77,38 @@ class FileStorageTest(unittest.TestCase):
     def test_storage_all(self):
         """ Test the all method """
 
-        all_objs = self.s_test.all()
+        all_objs = storage.all()
 
         self.assertTrue(type(all_objs) is dict)
 
         for key, val in all_objs.items():
-            self.assertTrue(key in self.s_test._FileStorage__objects)
-            self.assertEqual(val, self.s_test._FileStorage__objects[key])
+            self.assertTrue(key in storage._FileStorage__objects)
+            self.assertEqual(val, storage._FileStorage__objects[key])
 
-        self.assertTrue(all_objs is self.s_test._FileStorage__objects)
+        self.assertTrue(all_objs is storage._FileStorage__objects)
 
     def test_storage_all_args(self):
         """ test the all method with args """
 
         with self.assertRaises(TypeError):
-            all_objs = self.s_test.all("12")
+            all_objs = storage.all("12")
 
     def test_storage_save_and_reload(self):
         """ test the save method and reload """
 
-        self.assertFalse(os.path.exists(self.s_test._FileStorage__file_path))
+        self.assertFalse(os.path.exists(storage._FileStorage__file_path))
 
-        self.s_test.save()
+        storage.save()
 
-        self.assertTrue(os.path.exists(self.s_test._FileStorage__file_path))
-        self.assertTrue(os.path.isfile(self.s_test._FileStorage__file_path))
+        self.assertTrue(os.path.exists(storage._FileStorage__file_path))
+        self.assertTrue(os.path.isfile(storage._FileStorage__file_path))
 
-        obj_dict = self.s_test._FileStorage__objects.copy()
+        obj_dict = storage._FileStorage__objects.copy()
         for key, val in obj_dict.items():
-            del self.s_test._FileStorage__objects[key]
+            del storage._FileStorage__objects[key]
 
-        self.assertEqual(len(self.s_test._FileStorage__objects), 0)
-        self.assertEqual(len(self.s_test._FileStorage__objects), 0)
+        self.assertEqual(len(storage._FileStorage__objects), 0)
+        self.assertEqual(len(storage._FileStorage__objects), 0)
 
         self.s_test.reload()
         FileStorageTest.s_objs = self.s_test._FileStorage__objects
@@ -136,7 +136,6 @@ class FileStorageTest(unittest.TestCase):
     def test_instance_add_with_kwargs(self):
         bm = BaseModel()
         from_json = bm.to_dict()
-        print(self.s_test._FileStorage__objects)
         self.assertIn(".".join([
             "BaseModel", bm.id
         ]), storage.all())
