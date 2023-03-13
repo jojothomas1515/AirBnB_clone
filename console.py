@@ -41,9 +41,7 @@ class HBNBCommand(cmd.Cmd):
         """all method up be called by default,
         parses the regex and run if it matches.
         """
-        my_re = r"({})?\.?(all\(\))?".format(
-                "|".join(self.model_dict.keys())
-        )
+        my_re = r"({})?\.?(all\(\))?".format("|".join(self.model_dict.keys()))
         regex = re.compile(my_re)
         model, cond = regex.search(line).groups()
         if not cond:
@@ -63,9 +61,8 @@ class HBNBCommand(cmd.Cmd):
         parses the regex and run if it matches.
         """
         li = []
-        my_re = r"(?P<model>{})?\.?(?P<command>count\(\))?".format(
-                "|".join(self.model_dict.keys())
-        )
+        my_re = r"(?P<model>{})?\.?(?P<command>count\(\))?" \
+            .format("|".join(self.model_dict.keys()))
         regex = re.compile(my_re)
         model, cond = regex.search(line).groups()
         if not cond:
@@ -86,8 +83,8 @@ class HBNBCommand(cmd.Cmd):
         parses the regex and run if it matches.
         """
         my_re = r"(?P<model>{})?\.?" \
-                r"(?P<command>show\((?P<id>\"[^\"]+\")?\))?".format(
-                "|".join(self.model_dict.keys()))
+                r"(?P<command>show\((?P<id>\"[^\"]+\")?\))?" \
+            .format("|".join(self.model_dict.keys()))
         regex = re.compile(my_re)
         model, cond, r_id = regex.search(line).groups()
         if cond:
@@ -114,8 +111,8 @@ class HBNBCommand(cmd.Cmd):
                 parses the regex and run if it matches.
         """
         my_re = r"(?P<model>{})?\.?" \
-                r"(?P<command>destroy\((?P<id>\"[^\"]+\")?\))?".format(
-                "|".join(self.model_dict.keys()))
+                r"(?P<command>destroy\((?P<id>\"[^\"]+\")?\))?" \
+            .format("|".join(self.model_dict.keys()))
         regex = re.compile(my_re)
         model, cond, r_id = regex.search(line).groups()
         if cond:
@@ -172,7 +169,8 @@ class HBNBCommand(cmd.Cmd):
                     if r_key not in ['id', '__class__']:
                         obj.__dict__[r_key] = eval(r_value)
                     else:
-                        print("** cant update id or add __class__ key to dict **")
+                        print("** cant update id or"
+                              " add __class__ key to dict **")
                 storage.save()
             except (KeyError, AttributeError):
                 print("** no instance found **")
@@ -220,7 +218,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, line):
         """Prints the string representation of
-        an instance based on the class name and id. Ex: $ show BaseModel 1234-1234-1234.
+        an instance based on the class name and id.
+        Ex: $ show BaseModel 1234-1234-1234.
 
         Args:
             line: argument that command is supposed to work
@@ -231,8 +230,7 @@ class HBNBCommand(cmd.Cmd):
         elif line.split(" ")[0] in self.model_dict.keys():
             if len(line.split(" ")) == 2:
                 result = storage.all()
-                key = ".".join((line.split(" ")[0],
-                                line.split(" ")[1]))
+                key = ".".join((line.split(" ")[0], line.split(" ")[1]))
                 if key in result.keys():
                     print(result[key])
                 else:
@@ -255,8 +253,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         elif line.split(" ")[0] in self.model_dict.keys():
             if len(line.split(" ")) == 2:
-                key = ".".join((line.split(" ")[0],
-                                line.split(" ")[1]))
+                key = ".".join((line.split(" ")[0], line.split(" ")[1]))
                 if storage.destroy(key):
                     pass
                 else:
@@ -297,10 +294,10 @@ class HBNBCommand(cmd.Cmd):
             line: command argument
         """
         reg_text = r"(?P<model>{})?.?" \
-                       .format("|".join(self.model_dict.keys())) + \
                    r"(?P<id>[^\s]+)?.?" \
                    r"(?P<key>[\w\d_]+)?.?" \
-                   r"(?P<value>\"?[^\"]+\"?|[^ ]+)?"
+                   r"(?P<value>\"?[^\"]+\"?|[^ ]+)?" \
+            .format("|".join(self.model_dict.keys()))
         validator = re.compile(reg_text)
         res = validator.search(line)
         _model, _id, _key, _value = res.groups()

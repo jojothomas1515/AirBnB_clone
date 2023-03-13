@@ -61,13 +61,13 @@ class TestReview(unittest.TestCase):
 
     def test_review_dict_contents(self):
         data = self.obj.to_dict()
-        self.assertEquals(data['id'], self.obj.id)
-        self.assertEquals(Review.place_id, "")
-        self.assertEquals(Review.user_id, "")
-        self.assertEquals(Review.text, "")
-        self.assertEquals(data['created_at'], self.obj.created_at.isoformat())
-        self.assertEquals(data['updated_at'], self.obj.updated_at.isoformat())
-        self.assertEquals(data['__class__'], self.obj.__class__.__name__)
+        self.assertEqual(data['id'], self.obj.id)
+        self.assertEqual(Review.place_id, "")
+        self.assertEqual(Review.user_id, "")
+        self.assertEqual(Review.text, "")
+        self.assertEqual(data['created_at'], self.obj.created_at.isoformat())
+        self.assertEqual(data['updated_at'], self.obj.updated_at.isoformat())
+        self.assertEqual(data['__class__'], self.obj.__class__.__name__)
 
     def test_user_save(self):
         time_iso = self.obj.updated_at.isoformat()
