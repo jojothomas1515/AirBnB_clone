@@ -3,10 +3,10 @@
 import os
 import pathlib as pl
 import unittest
-
-from models.state import State
-from models import storage
 from datetime import datetime
+
+from models import storage
+from models.state import State
 
 
 class TestState(unittest.TestCase):
