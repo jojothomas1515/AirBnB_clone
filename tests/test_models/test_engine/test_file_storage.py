@@ -1,5 +1,6 @@
 import os
 import unittest
+from time import sleep
 
 from models import storage
 from models.amenity import Amenity
@@ -27,6 +28,18 @@ class FileStorageTest(unittest.TestCase):
             os.remove("test.json")
         except FileNotFoundError:
             pass
+
+    # def test_base_model_save(self):
+    #     obj = BaseModel()
+    #     with open("test.json", 'r', encoding='utf-8') as f:
+    #         data = f.read()
+
+    def test_one_save(self):
+        bm = BaseModel()
+        sleep(0.05)
+        first_updated_at = bm.updated_at
+        bm.save()
+        self.assertLess(first_updated_at, bm.updated_at)
 
     def test_storage1(self):
         """ test file storage """
