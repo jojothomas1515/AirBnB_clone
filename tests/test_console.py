@@ -24,7 +24,12 @@ class ConsoleTest(unittest.TestCase):
 
     s_test = FileStorage()
 
-    models = {"BaseModel": BaseModel, "User": User, "State": State, "City": City, "Amenity": Amenity, "Place": Place,
+    models = {"BaseModel": BaseModel,
+              "User": User,
+              "State": State,
+              "City": City,
+              "Amenity": Amenity,
+              "Place": Place,
               "Review": Review}
 
     @classmethod
@@ -364,7 +369,8 @@ class ConsoleTest(unittest.TestCase):
 
         if destroy:
             with patch("sys.stdout", new=StringIO()) as f:
-                HBNBCommand().onecmd("destroy Review {}".format(self.review_id))
+                HBNBCommand().onecmd("destroy Review {}"
+                                     .format(self.review_id))
                 value = f.getvalue()[:-1]
 
         # test all when model doesnt exist
@@ -438,7 +444,8 @@ class ConsoleTest(unittest.TestCase):
 
         if destroy:
             with patch("sys.stdout", new=StringIO()) as f:
-                HBNBCommand().onecmd("destroy Review {}".format(self.review_id))
+                HBNBCommand().onecmd("destroy Review {}"
+                                     .format(self.review_id))
                 value = f.getvalue()[:-1]
 
         with patch("sys.stdout", new=StringIO()) as f:
@@ -460,7 +467,8 @@ class ConsoleTest(unittest.TestCase):
         ConsoleTest.setUpClass()
         # test update with user
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("update User {} first_name \"Samuel\"".format(self.user_id))
+            HBNBCommand().onecmd("update User {} first_name \"Samuel\""
+                                 .format(self.user_id))
             value = f.getvalue()[:-1]
 
             # update command prints nothing
@@ -477,7 +485,8 @@ class ConsoleTest(unittest.TestCase):
 
         # test update with City
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("update City {} city_id \"11213ef\"".format(self.city_id))
+            HBNBCommand().onecmd("update City {} city_id \"11213ef\""
+                                 .format(self.city_id))
             value = f.getvalue()[:-1]
 
             # update command prints nothing
@@ -496,7 +505,9 @@ class ConsoleTest(unittest.TestCase):
         """ test the update command to update an existing attr """
 
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("update User {} first_name \"Samuel John Stones\"".format(self.user_id))
+            HBNBCommand().onecmd(
+                    "update User {} first_name "
+                    "\"Samuel John Stones\"".format(self.user_id))
             value = f.getvalue()[:-1]
 
             # get all objs and find the user object updated
@@ -509,7 +520,8 @@ class ConsoleTest(unittest.TestCase):
 
         # test update with City
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("update City {} city_id \"1e21b\"".format(self.city_id))
+            HBNBCommand().onecmd("update City {} city_id \"1e21b\""
+                                 .format(self.city_id))
             value = f.getvalue()[:-1]
 
             # get all objs and find the user object updated
@@ -545,7 +557,8 @@ class ConsoleTest(unittest.TestCase):
         """ test update when val is ommited """
 
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("update BaseModel {} name".format(self.base_id))
+            HBNBCommand().onecmd("update BaseModel {} name"
+                                 .format(self.base_id))
             value = f.getvalue()[:-1]
 
             self.assertEqual(value, "** value missing **")
@@ -601,7 +614,9 @@ class ConsoleTest(unittest.TestCase):
 
         ConsoleTest.setUpClass()
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("User.update(\"{}\", \"first_name\", \"Samuel\")".format(self.user_id))
+            HBNBCommand().onecmd("User.update(\"{}\","
+                                 " \"first_name\", \"Samuel\")".
+                                 format(self.user_id))
             value = f.getvalue()[:-1]
             self.assertEqual(value, "")
 
@@ -613,7 +628,9 @@ class ConsoleTest(unittest.TestCase):
             self.assertEqual("Samuel", obj.first_name)
 
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("City.update(\"{}\", \"city_id\", \"11213ef\")".format(self.city_id))
+            HBNBCommand().onecmd("City.update(\"{}\","
+                                 " \"city_id\", \"11213ef\")"
+                                 .format(self.city_id))
             value = f.getvalue()[:-1]
             self.assertEqual(value, "")
 
@@ -628,7 +645,9 @@ class ConsoleTest(unittest.TestCase):
         """ test the model.update() command to update an existing attr """
 
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("User.update(\"{}\", \"first_name\", \"Samuel Stones\")".format(self.user_id))
+            HBNBCommand().onecmd("User.update(\"{}\","
+                                 " \"first_name\", \"Samuel Stones\")"
+                                 .format(self.user_id))
             value = f.getvalue()[:-1]
 
             all_objs = storage.all()
@@ -637,48 +656,12 @@ class ConsoleTest(unittest.TestCase):
 
             self.assertEqual("Samuel Stones", obj.first_name)
 
-    # def test_model_update3(self):
-    #     """ test model.update() with more attributes """
-    #
-    #     with patch("sys.stdout", new=StringIO()) as f:
-    #         command = "State.update(\"{}\", \"first_name\", ".format(self.state_id)
-    #         command2 = "\"John John\", \"last_name\", \"Emeka\")"
-    #         HBNBCommand().onecmd(command + command2)
-    #
-    #         all_objs = storage.all()
-    #         obj_key = "State.{}".format(self.state_id)
-    #         obj = all_objs[obj_key]
-    #
-    #         self.assertTrue("first_name" in obj.to_dict())
-    #         self.assertEqual(obj.first_name, "John John")
-    #
-    #         self.assertTrue("last_name" not in obj.to_dict())
-    #
-    # def test_model_update_no_value(self):
-    #     """ test model.update() when val is ommited """
-    #
-    #     ConsoleTest.setUpClass()
-    #     with patch("sys.stdout", new=StringIO()) as f:
-    #         HBNBCommand().onecmd("BaseModel.update(\"{}\", \"name\")".format(self.base_id))
-    #         value = f.getvalue()[:-1]
-    #
-    #         self.assertEqual(value, "** value missing **")
-
-    # def test_model_update_no_attribute(self):
-    #     """ test model.update() when attribute missing """
-    #
-    #     ConsoleTest.setUpClass()
-    #     with patch("sys.stdout", new=StringIO()) as f:
-    #         HBNBCommand().onecmd("BaseModel.update(\"{}\")".format(self.base_id))
-    #         value = f.getvalue()[:-1]
-    #
-    #         self.assertEqual(value, "** attribute name missing **")
-
     def test_model_update_wrong_id(self):
         """ test model.update() wrong id """
 
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("Place.update(\"110092\")".format(self.base_id))
+            HBNBCommand().onecmd("Place.update(\"110092\")"
+                                 .format(self.base_id))
             value = f.getvalue()[:-1]
 
             self.assertEqual(value, "** no instance found **")
@@ -707,7 +690,9 @@ class ConsoleTest(unittest.TestCase):
 
         ConsoleTest.setUpClass()
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("User.update(\"{}\", {{'first_name': 'John'}})".format(self.user_id))
+            HBNBCommand().onecmd("User.update(\"{}\","
+                                 " {{'first_name': 'John'}})"
+                                 .format(self.user_id))
             value = f.getvalue()[:-1]
             self.assertEqual(value, "")
 
@@ -719,7 +704,8 @@ class ConsoleTest(unittest.TestCase):
             self.assertEqual("John", obj.first_name)
 
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("City.update(\"{}\", {{'city_id': '11213'}})".format(self.city_id))
+            HBNBCommand().onecmd("City.update(\"{}\", {{'city_id': '11213'}})"
+                                 .format(self.city_id))
             value = f.getvalue()[:-1]
             self.assertEqual(value, "")
 
@@ -734,7 +720,9 @@ class ConsoleTest(unittest.TestCase):
         """ test the model.update() command to update an existing attr """
 
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("User.update(\"{}\", {{\"first_name\": 'Samuel Stones'}})".format(self.user_id))
+            HBNBCommand().onecmd(
+                    "User.update(\"{}\", {{\"first_name\":"
+                    " 'Samuel Stones'}})".format(self.user_id))
             value = f.getvalue()[:-1]
 
             all_objs = storage.all()
@@ -748,7 +736,8 @@ class ConsoleTest(unittest.TestCase):
 
         ConsoleTest.setUpClass()
         with patch("sys.stdout", new=StringIO()) as f:
-            command = "User.update(\"{}\", {{'first_name': ".format(self.user_id)
+            command = "User.update(\"{}\", {{'first_name': ". \
+                format(self.user_id)
             command2 = "\"John John\", \"last_name\": 'Emeka', 'age': 89})"
             HBNBCommand().onecmd(command + command2)
 
@@ -769,7 +758,8 @@ class ConsoleTest(unittest.TestCase):
         """ test the model.update() command with wrong id"""
 
         with patch("sys.stdout", new=StringIO()) as f:
-            HBNBCommand().onecmd("User.update(\"112345\", {'first_name': 'John'})")
+            HBNBCommand().onecmd("User.update(\"112345\","
+                                 " {'first_name': 'John'})")
             value = f.getvalue()[:-1]
             self.assertEqual(value, "** no instance found **")
 
