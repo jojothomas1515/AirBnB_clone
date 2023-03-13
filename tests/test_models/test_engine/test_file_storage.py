@@ -13,16 +13,15 @@ from models.user import User
 
 class FileStorageTest(unittest.TestCase):
     """ Test the FileStorage class """
-    s_test = storage
-    s_test._FileStorage__file_path = "test.json"
+    storage._FileStorage__file_path = "test.json"
 
     @classmethod
     def setUpClass(cls):
         """ class before the tests """
 
-        objs = cls.s_test._FileStorage__objects.copy()
+        objs = storage._FileStorage__objects.copy()
         for key in objs.keys():
-            del cls.s_test._FileStorage__objects[key]
+            del storage._FileStorage__objects[key]
 
         try:
             os.remove("test.json")
@@ -38,8 +37,8 @@ class FileStorageTest(unittest.TestCase):
     def test_storage2(self):
         """ test file storage """
 
-        self.assertEqual(self.s_test._FileStorage__file_path, "test.json")
-        self.assertEqual(self.s_test._FileStorage__objects, {})
+        self.assertEqual(storage._FileStorage__file_path, "test.json")
+        self.assertEqual(storage._FileStorage__objects, {})
 
     def test_storage_new(self):
         """ Test the new method """
@@ -53,10 +52,10 @@ class FileStorageTest(unittest.TestCase):
         r1 = Review()
 
         objs = [b1, u1, s1, c1, a1, p1, r1]
-        self.assertEqual(len(self.s_test._FileStorage__objects), 7)
+        self.assertEqual(len(storage._FileStorage__objects), 7)
 
         i = 0
-        for key, val in self.s_test._FileStorage__objects.items():
+        for key, val in storage._FileStorage__objects.items():
             obj_key = "{}.{}".format(objs[i].__class__.__name__, objs[i].id)
             self.assertEqual(obj_key, key)
             self.assertTrue(val is objs[i])
@@ -66,13 +65,13 @@ class FileStorageTest(unittest.TestCase):
         """ Test the new method with more args """
 
         with self.assertRaises(TypeError):
-            self.s_test.new("b1", "u1")
+            storage.new("b1", "u1")
 
     def test_storage_new_less_args(self):
         """ Test the new method with less args """
 
         with self.assertRaises(TypeError):
-            self.s_test.new()
+            storage.new()
 
     def test_storage_all(self):
         """ Test the all method """
@@ -110,14 +109,14 @@ class FileStorageTest(unittest.TestCase):
         self.assertEqual(len(storage._FileStorage__objects), 0)
         self.assertEqual(len(storage._FileStorage__objects), 0)
 
-        self.s_test.reload()
-        FileStorageTest.s_objs = self.s_test._FileStorage__objects
+        storage.reload()
+        FileStorageTest.s_objs = storage._FileStorage__objects
 
-        self.assertEqual(len(self.s_test._FileStorage__objects), 7)
-        self.assertEqual(len(self.s_test._FileStorage__objects), 7)
+        self.assertEqual(len(storage._FileStorage__objects), 7)
+        self.assertEqual(len(storage._FileStorage__objects), 7)
         models = [BaseModel, User, State, City, Amenity, Place, Review]
         i = 0
-        for key, val in self.s_test._FileStorage__objects.items():
+        for key, val in storage._FileStorage__objects.items():
             self.assertTrue(type(val) is models[i])
             i += 1
 
@@ -125,13 +124,13 @@ class FileStorageTest(unittest.TestCase):
         """ test the save method with args """
 
         with self.assertRaises(TypeError):
-            self.s_test.save("hey")
+            storage.save("hey")
 
     def test_storage_reload_args(self):
         """ test the reload method with args """
 
         with self.assertRaises(TypeError):
-            self.s_test.save(102895)
+            storage.save(102895)
 
     def test_instance_add_with_kwargs(self):
         bm = BaseModel()
@@ -151,11 +150,11 @@ class FileStorageTest(unittest.TestCase):
     def tearDownClass(cls):
         """ calls after the tests """
 
-        objs = cls.s_test._FileStorage__objects.copy()
+        objs = storage._FileStorage__objects.copy()
         for key in objs.keys():
-            del cls.s_test._FileStorage__objects[key]
+            del storage._FileStorage__objects[key]
 
-        cls.s_test._FileStorage__objects = {}
+        storage._FileStorage__objects = {}
         try:
             os.remove("test.json")
         except FileNotFoundError:
