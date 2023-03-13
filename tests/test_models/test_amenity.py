@@ -1,16 +1,16 @@
 #!/usr/bin/python3
-"""Tests for Review module"""
+"""Tests for Amenity module"""
 import os
 import pathlib as pl
 import unittest
 from datetime import datetime
 
 from models import storage
-from models.review import Review
+from models.amenity import Amenity
 
 
-class TestReview(unittest.TestCase):
-    """Tests Cases for Review"""
+class TestAmenity(unittest.TestCase):
+    """Tests Cases for Amenity"""
 
     s_file = None
     s_objs = None
@@ -30,21 +30,21 @@ class TestReview(unittest.TestCase):
         del cls.s_file
 
     def setUp(self) -> None:
-        self.obj = Review()
+        self.obj = Amenity()
 
     def tearDown(self) -> None:
         del self.obj
 
-    def test_Review_attr_instance(self):
-        self.assertIsInstance(self.obj, Review)
+    def test_Amenity_attr_instance(self):
+        self.assertIsInstance(self.obj, Amenity)
         self.assertIsInstance(self.obj.id, str)
         self.assertIsInstance(self.obj.to_dict(), dict)
         self.assertIsInstance(self.obj.created_at, datetime)
         self.assertIsInstance(self.obj.updated_at, datetime)
         self.assertIsInstance(self.obj.name, str)
-        self.assertIsInstance(Review.name, str)
+        self.assertIsInstance(Amenity.name, str)
 
-    def test_Review_dict_keys(self):
+    def test_Amenity_dict_keys(self):
         data = self.obj.to_dict()
         self.assertIsInstance(data, dict)
         self.assertIn('__class__', data)
@@ -53,13 +53,13 @@ class TestReview(unittest.TestCase):
         self.assertIn('updated_at', data)
         self.assertNotIn('name', data)
 
-    def test_Review_dict_contents(self):
+    def test_Amenity_dict_contents(self):
         data = self.obj.to_dict()
-        self.assertEquals(data['id'], self.obj.id)
-        self.assertEquals(Review.name, "")
-        self.assertEquals(data['created_at'], self.obj.created_at.isoformat())
-        self.assertEquals(data['updated_at'], self.obj.updated_at.isoformat())
-        self.assertEquals(data['__class__'], self.obj.__class__.__name__)
+        self.assertEqual(data['id'], self.obj.id)
+        self.assertEqual(Amenity.name, "")
+        self.assertEqual(data['created_at'], self.obj.created_at.isoformat())
+        self.assertEqual(data['updated_at'], self.obj.updated_at.isoformat())
+        self.assertEqual(data['__class__'], self.obj.__class__.__name__)
 
     def test_user_save(self):
         time_iso = self.obj.updated_at.isoformat()

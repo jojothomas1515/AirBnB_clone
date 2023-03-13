@@ -55,11 +55,11 @@ class TestState(unittest.TestCase):
 
     def test_state_dict_contents(self):
         data = self.obj.to_dict()
-        self.assertEquals(data['id'], self.obj.id)
-        self.assertEquals(State.name, "")
-        self.assertEquals(data['created_at'], self.obj.created_at.isoformat())
-        self.assertEquals(data['updated_at'], self.obj.updated_at.isoformat())
-        self.assertEquals(data['__class__'], self.obj.__class__.__name__)
+        self.assertEqual(data['id'], self.obj.id)
+        self.assertEqual(State.name, "")
+        self.assertEqual(data['created_at'], self.obj.created_at.isoformat())
+        self.assertEqual(data['updated_at'], self.obj.updated_at.isoformat())
+        self.assertEqual(data['__class__'], self.obj.__class__.__name__)
 
     def test_user_save(self):
         time_iso = self.obj.updated_at.isoformat()

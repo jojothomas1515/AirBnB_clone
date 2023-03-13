@@ -1,19 +1,20 @@
-import unittest
 import os
-from models.base_model import BaseModel
-from models.user import User
-from models.state import State
-from models.city import City
+import unittest
+
+from models import storage
 from models.amenity import Amenity
+from models.base_model import BaseModel
+from models.city import City
 from models.place import Place
 from models.review import Review
-from models import storage
+from models.state import State
+from models.user import User
 
 
 class FileStorageTest(unittest.TestCase):
     """ Test the FileStorage class """
     s_test = storage
-    s_test._FileStorage__file_path = "file.json"
+    s_test._FileStorage__file_path = "test.json"
 
     @classmethod
     def setUpClass(cls):
@@ -24,7 +25,7 @@ class FileStorageTest(unittest.TestCase):
             del cls.s_test._FileStorage__objects[key]
 
         try:
-            os.remove("file.json")
+            os.remove("test.json")
         except FileNotFoundError:
             pass
 
@@ -37,7 +38,7 @@ class FileStorageTest(unittest.TestCase):
     def test_storage2(self):
         """ test file storage """
 
-        self.assertEqual(self.s_test._FileStorage__file_path, "file.json")
+        self.assertEqual(self.s_test._FileStorage__file_path, "test.json")
         self.assertEqual(self.s_test._FileStorage__objects, {})
 
     def test_storage_new(self):
@@ -138,7 +139,7 @@ class FileStorageTest(unittest.TestCase):
 
         cls.s_test._FileStorage__objects = {}
         try:
-            os.remove("file.json")
+            os.remove("test.json")
         except FileNotFoundError:
             pass
 
@@ -151,6 +152,6 @@ class FileStorageTest(unittest.TestCase):
             del cls.s_test._FileStorage__objects[key]
 
         try:
-            os.remove("file.json")
+            os.remove("test.json")
         except FileNotFoundError:
             pass
