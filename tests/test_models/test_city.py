@@ -1,16 +1,16 @@
 #!/usr/bin/python3
-"""Tests for state module"""
+"""Tests for City module"""
 import os
 import pathlib as pl
 import unittest
-
-from models.state import State
-from models import storage
 from datetime import datetime
 
+from models import storage
+from models.city import City
 
-class TestState(unittest.TestCase):
-    """Tests Cases for State"""
+
+class TestCity(unittest.TestCase):
+    """Tests Cases for City"""
 
     s_file = None
     s_objs = None
@@ -30,21 +30,22 @@ class TestState(unittest.TestCase):
         del cls.s_file
 
     def setUp(self) -> None:
-        self.obj = State()
+        self.obj = City()
 
     def tearDown(self) -> None:
         del self.obj
 
-    def test_state_attr_instance(self):
-        self.assertIsInstance(self.obj, State)
+    def test_City_attr_instance(self):
+        self.assertIsInstance(self.obj, City)
         self.assertIsInstance(self.obj.id, str)
         self.assertIsInstance(self.obj.to_dict(), dict)
         self.assertIsInstance(self.obj.created_at, datetime)
         self.assertIsInstance(self.obj.updated_at, datetime)
         self.assertIsInstance(self.obj.name, str)
-        self.assertIsInstance(State.name, str)
+        self.assertIsInstance(City.name, str)
+        self.assertIsInstance(City.state_id, str)
 
-    def test_state_dict_keys(self):
+    def test_City_dict_keys(self):
         data = self.obj.to_dict()
         self.assertIsInstance(data, dict)
         self.assertIn('__class__', data)
@@ -52,14 +53,16 @@ class TestState(unittest.TestCase):
         self.assertIn('created_at', data)
         self.assertIn('updated_at', data)
         self.assertNotIn('name', data)
+        self.assertNotIn('state_id', data)
 
-    def test_state_dict_contents(self):
+    def test_City_dict_contents(self):
         data = self.obj.to_dict()
-        self.assertEquals(data['id'], self.obj.id)
-        self.assertEquals(State.name, "")
-        self.assertEquals(data['created_at'], self.obj.created_at.isoformat())
-        self.assertEquals(data['updated_at'], self.obj.updated_at.isoformat())
-        self.assertEquals(data['__class__'], self.obj.__class__.__name__)
+        self.assertEqual(data['id'], self.obj.id)
+        self.assertEqual(City.name, "")
+        self.assertEqual(City.state_id, "")
+        self.assertEqual(data['created_at'], self.obj.created_at.isoformat())
+        self.assertEqual(data['updated_at'], self.obj.updated_at.isoformat())
+        self.assertEqual(data['__class__'], self.obj.__class__.__name__)
 
     def test_user_save(self):
         time_iso = self.obj.updated_at.isoformat()
