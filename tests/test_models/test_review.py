@@ -1,16 +1,16 @@
 #!/usr/bin/python3
-"""Tests for state module"""
+"""Tests for review module"""
 import os
 import pathlib as pl
 import unittest
-
-from models.state import State
-from models import storage
 from datetime import datetime
 
+from models import storage
+from models.review import Review
 
-class TestState(unittest.TestCase):
-    """Tests Cases for State"""
+
+class TestReview(unittest.TestCase):
+    """Tests Cases for Review"""
 
     s_file = None
     s_objs = None
@@ -30,33 +30,41 @@ class TestState(unittest.TestCase):
         del cls.s_file
 
     def setUp(self) -> None:
-        self.obj = State()
+        self.obj = Review()
 
     def tearDown(self) -> None:
         del self.obj
 
-    def test_state_attr_instance(self):
-        self.assertIsInstance(self.obj, State)
+    def test_review_attr_instance(self):
+        self.assertIsInstance(self.obj, Review)
         self.assertIsInstance(self.obj.id, str)
         self.assertIsInstance(self.obj.to_dict(), dict)
         self.assertIsInstance(self.obj.created_at, datetime)
         self.assertIsInstance(self.obj.updated_at, datetime)
-        self.assertIsInstance(self.obj.name, str)
-        self.assertIsInstance(State.name, str)
+        self.assertIsInstance(self.obj.place_id, str)
+        self.assertIsInstance(Review.place_id, str)
+        self.assertIsInstance(self.obj.user_id, str)
+        self.assertIsInstance(Review.user_id, str)
+        self.assertIsInstance(self.obj.text, str)
+        self.assertIsInstance(Review.text, str)
 
-    def test_state_dict_keys(self):
+    def test_review_dict_keys(self):
         data = self.obj.to_dict()
         self.assertIsInstance(data, dict)
         self.assertIn('__class__', data)
         self.assertIn('id', data)
         self.assertIn('created_at', data)
         self.assertIn('updated_at', data)
-        self.assertNotIn('name', data)
+        self.assertNotIn('place_id', data)
+        self.assertNotIn('user_id', data)
+        self.assertNotIn('text', data)
 
-    def test_state_dict_contents(self):
+    def test_review_dict_contents(self):
         data = self.obj.to_dict()
         self.assertEquals(data['id'], self.obj.id)
-        self.assertEquals(State.name, "")
+        self.assertEquals(Review.place_id, "")
+        self.assertEquals(Review.user_id, "")
+        self.assertEquals(Review.text, "")
         self.assertEquals(data['created_at'], self.obj.created_at.isoformat())
         self.assertEquals(data['updated_at'], self.obj.updated_at.isoformat())
         self.assertEquals(data['__class__'], self.obj.__class__.__name__)
