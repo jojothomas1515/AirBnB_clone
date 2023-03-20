@@ -1,9 +1,13 @@
 .places {
-    display: flex;
-    flex-wrap: wrap;
     position: relative;
+}
+.article_container{
+    top:20px;
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-wrap:wrap;
     justify-content: center;
-    padding: 20px;
 }
 
 .places h1 {
@@ -26,5 +30,4 @@
 
 .places article h2 {
     font-size: 30px;
-
 }
