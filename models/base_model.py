@@ -29,19 +29,19 @@ class BaseModel:
                 if k == '__class__':
                     continue
                 elif k in ['created_at', 'updated_at']:
-                    self.__setattr__(k, datetime.fromisoformat(kwargs[k]))
+                    setattr(self, k, datetime.fromisoformat(kwargs[k]))
                 else:
-                    self.__setattr__(k, kwargs[k])
+                    setattr(self, k, kwargs[k])
         else:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = self.created_at
+            md.storage.new(self)
 
     def save(self):
         """Update instance attributes and write the timestamp to
         the updated_at attribute."""
         self.updated_at = datetime.now()
-        md.storage.new(self)
         md.storage.save()
 
     def to_dict(self):

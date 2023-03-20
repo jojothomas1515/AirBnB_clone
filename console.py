@@ -2,33 +2,21 @@
 """Console module for managing model object creation and storage."""
 import cmd
 import os
-from models.base_model import BaseModel
-from models.user import User
-from models import storage
-from models.place import Place
-from models.state import State
-from models.city import City
-from models.amenity import Amenity
-from models.review import Review
 import re
 
-
-class TermColor:
-    """Colors for styling outputs"""
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
+from models import storage
+from models.amenity import Amenity
+from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
     """Console command line class for model management."""
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
     model_dict: dict = {"BaseModel": BaseModel,
                         "User": User,
                         "Place": Place,
@@ -37,13 +25,23 @@ class HBNBCommand(cmd.Cmd):
                         "Amenity": Amenity,
                         "Review": Review}
 
+    def emptyline(self):
+        """Does Nothing."""
+        pass
+
+    def do_quit(self, line):
+        """Exit the command line."""
+        return True
+
+    def do_EOF(self, line):
+        """Exit the command line."""
+        return True
+
     def all(self, line):
         """all method up be called by default,
         parses the regex and run if it matches.
         """
-        my_re = r"({})?\.?(all\(\))?".format(
-                "|".join(self.model_dict.keys())
-        )
+        my_re = r"({})?\.?(all\(\))?".format("|".join(self.model_dict.keys()))
         regex = re.compile(my_re)
         model, cond = regex.search(line).groups()
         if not cond:
@@ -63,12 +61,10 @@ class HBNBCommand(cmd.Cmd):
         parses the regex and run if it matches.
         """
         li = []
-        my_re = r"(?P<model>{})?\.?(?P<command>count\(\))?".format(
-                "|".join(self.model_dict.keys())
-        )
+        my_re = r"(?P<model>{})?\.?(?P<command>count\(\))?" \
+            .format("|".join(self.model_dict.keys()))
         regex = re.compile(my_re)
         model, cond = regex.search(line).groups()
-        # todo : fix implementation
         if not cond:
             return False
         if cond and model in self.model_dict.keys():
@@ -87,12 +83,10 @@ class HBNBCommand(cmd.Cmd):
         parses the regex and run if it matches.
         """
         my_re = r"(?P<model>{})?\.?" \
-                r"(?P<command>show\((?P<id>\"[^\"]+\")?\))?".format(
-                "|".join(self.model_dict.keys())
-        )
+                r"(?P<command>show\((?P<id>\"[^\"]+\")?\))?" \
+            .format("|".join(self.model_dict.keys()))
         regex = re.compile(my_re)
         model, cond, r_id = regex.search(line).groups()
-        # todo : fix implementation
         if cond:
             if not r_id:
                 print("** id is missing **")
@@ -117,12 +111,10 @@ class HBNBCommand(cmd.Cmd):
                 parses the regex and run if it matches.
         """
         my_re = r"(?P<model>{})?\.?" \
-                r"(?P<command>destroy\((?P<id>\"[^\"]+\")?\))?".format(
-                "|".join(self.model_dict.keys())
-        )
+                r"(?P<command>destroy\((?P<id>\"[^\"]+\")?\))?" \
+            .format("|".join(self.model_dict.keys()))
         regex = re.compile(my_re)
         model, cond, r_id = regex.search(line).groups()
-        # todo : fix implementation
         if cond:
             if not r_id:
                 print("** id is missing **")
@@ -133,9 +125,10 @@ class HBNBCommand(cmd.Cmd):
         if cond and model in self.model_dict.keys():
             key = ".".join((model, eval(r_id)))
             if storage.destroy(key):
-                pass
+                return True
             else:
                 print("** no instance found **")
+                return True
         else:
             print("** class doesn't exist **")
             return True
@@ -144,8 +137,7 @@ class HBNBCommand(cmd.Cmd):
         """update method up be called by default,
          parses the regex and run if it matches.
         """
-        my_re = r"(?P<model>{})?\.?".format(
-                "|".join(self.model_dict.keys())) + \
+        my_re = r"(?P<model>[A-Za-z]+)?\.?" \
                 r"(?P<command>update\((?P<id>\"[^\"]+\")?,?\s?" \
                 r"(?P<key>\"[^\"]+\"|\{[^\}]+\})?,?\s?" \
                 r"(?P<value>\"?[^\"]+\"?)?\)" \
@@ -153,16 +145,16 @@ class HBNBCommand(cmd.Cmd):
 
         regex = re.compile(my_re)
         model, cond, r_id, r_key, r_value = regex.search(line).groups()
-        # todo : complete implementation and document your code
         if cond:
+            pass
+        else:
+            return False
+
+        if model in self.model_dict.keys():
             if not r_id:
                 print("** id is missing **")
                 print("** Usage <Model>.update(\"<id>\") **")
                 return True
-        else:
-            return False
-
-        if cond and model in self.model_dict.keys():
             obj_key = ".".join((model, eval(r_id)))
             try:
                 obj: object = storage.all()[obj_key]
@@ -177,7 +169,8 @@ class HBNBCommand(cmd.Cmd):
                     if r_key not in ['id', '__class__']:
                         obj.__dict__[r_key] = eval(r_value)
                     else:
-                        print("** cant update id or add __class__ key to dict **")
+                        print("** cant update id or"
+                              " add __class__ key to dict **")
                 storage.save()
             except (KeyError, AttributeError):
                 print("** no instance found **")
@@ -186,25 +179,9 @@ class HBNBCommand(cmd.Cmd):
             return True
         return (True)
 
-    def emptyline(self):
-        """Does Nothing."""
-        pass
-
-    def do_quit(self, line):
-        """Exit the command line."""
-        exit(1)
-
-    def do_EOF(self, line):
-        """Exit the command line."""
-        exit(1)
-
     def do_clear(self, line):
         """Clear the terminal window."""
         os.system("clear")
-
-    def completedefault(self, *ignored) -> list[str]:
-        """Basic autocomplete functionality."""
-        return [i for i in self.model_dict.keys() if i.startswith(ignored[0])]
 
     def default(self, line: str) -> None:
         """Using regular expression to map command
@@ -222,7 +199,7 @@ class HBNBCommand(cmd.Cmd):
         elif self.update(line):
             pass
         else:
-            print("** invalid command **")
+            self.stdout.write('*** Unknown syntax: %s\n' % line)
 
     def do_create(self, line: str):
         """Create a new instance of BaseModel.
@@ -241,7 +218,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, line):
         """Prints the string representation of
-        an instance based on the class name and id. Ex: $ show BaseModel 1234-1234-1234.
+        an instance based on the class name and id.
+        Ex: $ show BaseModel 1234-1234-1234.
 
         Args:
             line: argument that command is supposed to work
@@ -252,8 +230,7 @@ class HBNBCommand(cmd.Cmd):
         elif line.split(" ")[0] in self.model_dict.keys():
             if len(line.split(" ")) == 2:
                 result = storage.all()
-                key = ".".join((line.split(" ")[0],
-                                line.split(" ")[1]))
+                key = ".".join((line.split(" ")[0], line.split(" ")[1]))
                 if key in result.keys():
                     print(result[key])
                 else:
@@ -272,13 +249,11 @@ class HBNBCommand(cmd.Cmd):
          Args:
             line: argument that command is supposed to work
          """
-        # Todo:delete instance and save further implementations
         if line == "":
             print("** class name missing **")
         elif line.split(" ")[0] in self.model_dict.keys():
             if len(line.split(" ")) == 2:
-                key = ".".join((line.split(" ")[0],
-                                line.split(" ")[1]))
+                key = ".".join((line.split(" ")[0], line.split(" ")[1]))
                 if storage.destroy(key):
                     pass
                 else:
@@ -287,8 +262,6 @@ class HBNBCommand(cmd.Cmd):
                 print("** instance id missing **")
         else:
             print("** class doesn't exist **")
-
-        # storage.destroy(line)
 
     def do_all(self, line):
         """Prints all string representation of all
@@ -321,50 +294,32 @@ class HBNBCommand(cmd.Cmd):
             line: command argument
         """
         reg_text = r"(?P<model>{})?.?" \
-                       .format("|".join(self.model_dict.keys())) + \
-                   r"(?P<id>\"?[^\"]+\"?)?.?" \
+                   r"(?P<id>[^\s]+)?.?" \
                    r"(?P<key>[\w\d_]+)?.?" \
-                   r"(?P<value>\"[^\"]+\"|[^ ]+)?"
+                   r"(?P<value>\"?[^\"]+\"?|[^ ]+)?" \
+            .format("|".join(self.model_dict.keys()))
         validator = re.compile(reg_text)
         res = validator.search(line)
         _model, _id, _key, _value = res.groups()
+        data = storage.all()
         if line == "":
             print("** class name missing **")
-        elif _model in self.model_dict.keys():
-            if _id:
-                inst = ".".join((_model,
-                                 _id))
-                try:
-                    obj = storage.all()[inst]
-                    if _key:
-                        if _value:
-                            if _key not in ["created_at", 'updated_at', "id"]:
-                                obj.__dict__[_key] = eval(_value)
-                                storage.save()
-
-                        else:
-                            print("** attribute name missing **")
-                    else:
-                        print("** attribute name missing **")
-                except KeyError:
-                    print("** no instance found **")
-            else:
-                print("** instance id missing **")
-        else:
+        elif not _model:
             print("** class doesn't exist **")
+        elif not _id:
+            print("** instance id missing **")
+        elif ".".join((_model, _id)) not in data.keys():
+            print("** no instance found **")
+        elif not _key:
+            print("** attribute name missing **")
+        elif not _value:
+            print("** value missing **")
+        else:
+            d_key = ".".join((_model, _id))
+            inst: BaseModel = data[d_key]
+            setattr(inst, _key, eval(_value))
+            inst.save()
 
 
-banner = """
-   (_)         (_)      (_)(_)(_)(_) _       (_) _       (_)      (_)(_)(_)(_) _    
-   (_)         (_)       (_)        (_)      (_)(_)_     (_)       (_)        (_)   
-   (_) _  _  _ (_)       (_) _  _  _(_)      (_)  (_)_   (_)       (_) _  _  _(_)   
-   (_)(_)(_)(_)(_)       (_)(_)(_)(_)_       (_)    (_)_ (_)       (_)(_)(_)(_)_    
-   (_)         (_)       (_)        (_)      (_)      (_)(_)       (_)        (_)   
-   (_)         (_)       (_)_  _  _ (_)      (_)         (_)       (_)_  _  _ (_)   
-   (_)         (_)      (_)(_)(_)(_)         (_)         (_)      (_)(_)(_)(_)      
-"""
-intro = "{}\t{}\n\tconsole By JOJO THOMAS and VICTORIA OLABODEH{}\n" \
-        "\n{}\tW\tE\tL\tC\tO\tM\tE\n\n{}".format(TermColor.OKCYAN, banner, TermColor.ENDC,
-                                                 TermColor.HEADER, TermColor.ENDC)
 if __name__ == '__main__':
-    HBNBCommand().cmdloop(intro=intro)
+    HBNBCommand().cmdloop()
